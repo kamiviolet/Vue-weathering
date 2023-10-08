@@ -12,6 +12,7 @@ const props = defineProps({
 
 <style>
 footer {
+  padding-block: 2em;
   text-align: center;
   font-size: .85em;
 }

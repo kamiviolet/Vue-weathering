@@ -12,6 +12,7 @@ import FooterView from './components/FooterView.vue';
       <nav>
         <RouterLink to="/">Main</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/favourite">Favourite</RouterLink>
       </nav>
     </div>
   </header>
@@ -22,10 +23,12 @@ import FooterView from './components/FooterView.vue';
 <style scoped>
 header {
   line-height: 1.5;
+  width: 100%;
 }
 
 nav {
-  width: 100%;
+  width: inherit;
+
   font-size: 12px;
   text-align: center;
 
@@ -56,6 +59,4 @@ nav a {
 nav a:first-of-type {
   border: 0;
 }
-
-
 </style>

@@ -1,14 +1,19 @@
 @import './base.css';
 
+* {
+  box-sizing: border-box;
+}
+
 #app {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   font-weight: normal;
-  width: 80%;
   min-height: 100vh;
   grid-template-rows: min-content minmax(70vh, auto) auto;
   place-items: baseline;
+  overflow-x: hidden;
 }
 
 h1 {
