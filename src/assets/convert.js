@@ -17,6 +17,23 @@ export function convertToDateString(dt_str) {
   return new Date(dt_str).toLocaleDateString("en-GB", options);
 }
 
+export function convertTimezoneToHours(second) {
+  return second / 60 /60
+}
+
+export function convertToLocalTime(str, seconds) {
+  const localTime = str.split(" ")
+  localTime[1] = +localTime[1].substring(0,2) + convertTimezoneToHours(seconds)
+  localTime[1] = normaliseConvertedHours(localTime[1]) + ":00:00"
+  return localTime.join(" ")
+}
+
+export function normaliseConvertedHours(num) {
+  if (num == 24) return 0;
+  if (num > 24) return num - 24;
+  return num;
+}
+
 export function convertDegToDirection(deg) {
   let direction = "";
   if (deg > 336 || deg <= 23) direction = "N";

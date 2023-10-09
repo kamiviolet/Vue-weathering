@@ -57,16 +57,16 @@ const props = defineProps({
   </div>
 </template>
 
-<style>
+<style scoped>
 .hourly_card {
-  background-color: lightblue;
+  background: rgba(173, 216, 230, 0.5);
   border-radius: 16px;
   width: auto;
-  height: 175px;
   display: grid;
   text-align: center;
   grid-template-rows: 1fr 1fr 4fr 1fr;
   margin-inline: .75em;
+  margin-block: 1em;
   padding-block: .25em;
 }
 

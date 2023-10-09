@@ -27,5 +27,6 @@ const props = defineProps({
 <style>
 .current_stat {
   margin-block: 1em;
+  text-align: center;
 }
 </style>

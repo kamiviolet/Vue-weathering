@@ -5,7 +5,7 @@
 }
 
 #app {
-  max-width: 1280px;
+  max-width: 1024px;
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
@@ -14,6 +14,8 @@
   grid-template-rows: min-content minmax(70vh, auto) auto;
   place-items: baseline;
   overflow-x: hidden;
+  background: radial-gradient(ellipse at top left, #8796be, transparent), radial-gradient(ellipse at bottom, #b0c4db, transparent);
+  background-attachment: fixed;
 }
 
 h1 {
@@ -24,7 +26,7 @@ h1 {
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: rgb(31, 36, 33);
   transition: 0.4s;
 }
 
@@ -34,7 +36,7 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   body {
     display: flex;
     place-items: center;
