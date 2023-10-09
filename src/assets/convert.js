@@ -31,6 +31,7 @@ export function convertToLocalTime(str, seconds) {
 export function normaliseConvertedHours(num) {
   if (num == 24) return 0;
   if (num > 24) return num - 24;
+  if (num < 0) return 24 + num; 
   return num;
 }
 

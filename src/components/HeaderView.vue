@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
+    <h2 class="green">{{ msg }}</h2>
   </div>
 </template>
 
@@ -18,10 +18,8 @@ defineProps({
   text-align: center;
   margin-block: 1em;
   
-  @media (min-width: 1024px) {
-    .greetings {
-      text-align: left;
-    }
+  @media (width> 900px) {
+    text-align: left;
   }
 }
 </style>

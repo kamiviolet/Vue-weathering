@@ -76,7 +76,7 @@ export async function getForecastByCoords(location) {
 }
 
 export async function getSuggestedDropDown(str) {
-  return fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${str}&apiKey=${process.env.VITE_GEOAPIFY_API}`)
+  return fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${str}&type=city&apiKey=${process.env.VITE_GEOAPIFY_API}`)
   .then(res => res.json())
   .then((data) => {
     if (data.features?.length > 0) {
@@ -88,12 +88,7 @@ export async function getSuggestedDropDown(str) {
   .then(list => {
     if (list) {
       return list.map(e => {
-        return {
-          name: e.properties.city,
-          country: e.properties.country,
-          country_code: e.properties.country_code,
-          coordinates: e.geometry.coordinates
-        }
+        return e.properties.city
       })
     }
   })

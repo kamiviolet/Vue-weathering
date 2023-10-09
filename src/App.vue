@@ -12,7 +12,7 @@ import FooterView from './components/FooterView.vue';
       <nav>
         <RouterLink to="/">Main</RouterLink>
         <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/favourite">Favourite</RouterLink>
+        <!-- <RouterLink to="/favourite">Favourite</RouterLink> -->
       </nav>
     </div>
   </header>

@@ -56,12 +56,14 @@ onMounted(() => {
 })
 
 function getCustomRegion() {
-  return getForecastByCity(searchTerm.value)
-  .then(({city, record}) => {
-      forecast.value = record;
-      region.value = city.name;
-    })
-  .then(()=>dailyRecord.value = getDailyRecord(forecast.value))
+  if (searchTerm.value) {
+    return getForecastByCity(searchTerm.value)
+      .then(({city, record}) => {
+          forecast.value = record;
+          region.value = city.name;
+        })
+      .then(()=>dailyRecord.value = getDailyRecord(forecast.value))
+  }
 }
 
 </script>
@@ -72,25 +74,34 @@ function getCustomRegion() {
     <SearchBoxView>
       <form
       @submit.prevent="getCustomRegion"
-      class="searchbox"
+      class="search_form"
       >
         <input
           v-model="searchTerm"
-          type="text"
-          placeholder="Please enter the city name">
-        <select
-          v-model="searchTerm"
-          class="suggestion_dropdown">
-        <option
-          v-for="city of suggestedCities">
-          <span>{{ city.name }}</span>
-        </option>
-        </select>
-        <button type="submit">Search</button>
+          class="textbox"
+          placeholder="Please enter a city name"
+        />
+        <!-- 
+          <v-autocomplete
+            v-model="searchTerm"
+            :items="suggestedCities"
+            density="compact"
+            label="Perhaps you are looking for..."
+            class="dropdown"
+            variant="outlined">
+          </v-autocomplete>
+       -->
+        <button
+          type="submit"
+          class="submit_btn"
+          >
+          Submit
+        </button>
       </form>
     </SearchBoxView>
+
     <CurrentStatView
-      v-if="forecast"
+      v-if="location"
       :region="region"
       :temp="displayTemp == 'celcius' ?
       convertKevinToCelcius(forecast[0].temp) + 'C°' :
@@ -131,14 +142,48 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   @media (min-width: 900px) {
     text-align: left;
   }
 }
 
-h2 {
-  padding-block: .5em;
+.search_form {
+  display: grid;
+  justify-items: center;
+  font-size: .9em;
+
+  @media (width > 1024px) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-3.5em);
+    grid-template-columns: auto auto;
+    justify-items: last baseline;
+    align-items: center;
+  }
+}
+
+.textbox {
+  max-width: 90%;
+  width:200px;
+  border: unset;
+  padding: .25em;
+  border-bottom: 1px black solid;
+}
+
+.submit_btn {
+  max-width: 90%;
+  width:100px;
+  padding: .25em;
+  margin-block: 1.5em;
+  background-color: whitesmoke;
+  border-radius: 6px;
+
+  @media (width> 1024px) {
+    margin: 0;
+  }
 }
 
 .summary {
