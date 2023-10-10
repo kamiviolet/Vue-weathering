@@ -14,7 +14,7 @@ const location = ref({});
 const region = ref('')
 const forecast = ref([]);
 const dailyRecord = ref([]);
-const displayTemp = ref("frahrenheit");
+const displayTemp = ref("celcius");
 const searchTerm = ref('');
 const suggestedCities = ref([]);
 

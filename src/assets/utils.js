@@ -121,7 +121,7 @@ export function getFilteredCities(list, str) {
 }
 
 export async function getCountryByCode(code) {
-  return fetch(`http://api.worldbank.org/v2/country/${code}?format=json`)
+  return fetch(`https://api.worldbank.org/v2/country/${code}?format=json`)
   .then(res => res.json())
   .then(d => d[1][0])
   .then(result => result.name)
