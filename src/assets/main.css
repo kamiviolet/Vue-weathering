@@ -23,11 +23,7 @@ body {
   overflow-x: hidden;
   background: radial-gradient(ellipse at top left, #8796be, transparent), radial-gradient(ellipse at bottom, #b0c4db, transparent);
   background-attachment: fixed;
-}
-
-h1 {
-  font-weight: 500;
-  font-size: 2.4em;
+  position: relative;
 }
 
 a,

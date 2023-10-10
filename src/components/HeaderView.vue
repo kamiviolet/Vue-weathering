@@ -15,11 +15,7 @@ defineProps({
 
 <style scoped>
 .greetings {
-  text-align: center;
   margin-block: 1em;
-  
-  @media (width> 900px) {
-    text-align: left;
-  }
+  text-align: left;
 }
 </style>

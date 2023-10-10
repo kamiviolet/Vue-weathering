@@ -47,32 +47,49 @@ export function getMostFrequentWeather(list) {
   return Object.entries(record).sort((a,b) => b[1] - a[1])[0][0];
 }
 
+export async function getForecast(type, location) {
+  let query = '';
+
+  if (type == 'coords') query = `lat=${location.latitude}&lon=${location.longitude}`
+  if (type == 'city') query = `q=${location}`
+
+  return fetch(`https://api.openweathermap.org/data/2.5/forecast?${query}&appid=${process.env.VITE_OPENWEATHER_API}`)
+  .then((res) => res.json())
+  .then((d) => {
+    const record = d.list.map((e) => {
+      return {
+        datetime: convertToDateString(convertToLocalTime(e.dt_txt, d.city.timezone)),
+        temp: +e.main.temp,
+        feels_like: +e.main.feels_like,
+        humidity: +e.main.humidity,
+        weather: {
+          icon: 'https://openweathermap.org/img/wn/' + e.weather[0].icon + '@2x.png',
+          main: e.weather[0].main,
+        },
+        pressure: +e.main.pressure,
+        wind: {
+          speed: +e.wind.speed,
+          deg: +e.wind.deg
+        }
+      };
+    });
+    return {city: d.city, record: record}
+  })
+  .then(({city, record}) => {
+    return getCountryByCode(city.country)
+    .then(country => {
+      return ({city: {...city, country}, record})
+    });
+  })
+  .catch((error) => console.warn(error));
+}
+
 export async function getForecastByCoords(location) {
-  return fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?lat=${location.latitude}&lon=${location.longitude}&appid=${process.env.VITE_OPENWEATHER_API}`
-  )
-    .then((res) => res.json())
-    .then((d) => {
-      const record = d.list.map((e) => {
-        return {
-          datetime: convertToDateString(convertToLocalTime(e.dt_txt, d.city.timezone)),
-          temp: +e.main.temp,
-          feels_like: +e.main.feels_like,
-          humidity: +e.main.humidity,
-          weather: {
-            icon: 'https://openweathermap.org/img/wn/' + e.weather[0].icon + '@2x.png',
-            main: e.weather[0].main,
-          },
-          pressure: +e.main.pressure,
-          wind: {
-            speed: +e.wind.speed,
-            deg: +e.wind.deg
-          }
-        };
-      });
-      return {city: d.city, record: record}
-    })
-    .catch((error) => console.warn(error));
+  return getForecast('coords', location)
+}
+
+export async function getForecastByCity(location) {
+  return getForecast('city', location)
 }
 
 export async function getSuggestedDropDown(str) {
@@ -103,28 +120,10 @@ export function getFilteredCities(list, str) {
   })
 }
 
-export async function getForecastByCity(city) {
-  return fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${process.env.VITE_OPENWEATHER_API}`)
-  .then((res) => res.json())
-  .then((d) => {
-    const record = d.list.map((e) => {
-      return {
-        datetime: convertToDateString(convertToLocalTime(e.dt_txt, d.city.timezone)),
-        temp: +e.main.temp,
-        feels_like: +e.main.feels_like,
-        humidity: +e.main.humidity,
-        weather: {
-          icon: 'https://openweathermap.org/img/wn/' + e.weather[0].icon + '@2x.png',
-          main: e.weather[0].main,
-        },
-        pressure: +e.main.pressure,
-        wind: {
-          speed: +e.wind.speed,
-          deg: +e.wind.deg
-        }
-      };
-    });
-    return {city: d.city, record: record}
-  })
+export async function getCountryByCode(code) {
+  return fetch(`http://api.worldbank.org/v2/country/${code}?format=json`)
+  .then(res => res.json())
+  .then(d => d[1][0])
+  .then(result => result.name)
   .catch((error) => console.warn(error));
 }

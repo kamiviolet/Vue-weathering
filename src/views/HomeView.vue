@@ -34,7 +34,7 @@ watch(location, () => {
   getForecastByCoords(location.value)
     .then(({city, record}) => {
       forecast.value = record;
-      region.value = city.name;
+      region.value = [city.name, city.country, city.timezone];
     })
     .then(()=>dailyRecord.value = getDailyRecord(forecast.value))
 })
@@ -60,7 +60,7 @@ function getCustomRegion() {
     return getForecastByCity(searchTerm.value)
       .then(({city, record}) => {
           forecast.value = record;
-          region.value = city.name;
+          region.value = [city.name, city.country, city.timezone];
         })
       .then(()=>dailyRecord.value = getDailyRecord(forecast.value))
   }
@@ -95,11 +95,10 @@ function getCustomRegion() {
           type="submit"
           class="submit_btn"
           >
-          Submit
+          &#x1F50E
         </button>
       </form>
     </SearchBoxView>
-
     <CurrentStatView
       v-if="location"
       :region="region"
@@ -142,7 +141,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
 
   @media (min-width: 900px) {
     text-align: left;
@@ -151,18 +149,16 @@ main {
 
 .search_form {
   display: grid;
-  justify-items: center;
+  grid-template-columns: auto auto;
+  justify-items: last baseline;
+  align-items: center;
   font-size: .9em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-block: 1em;
+  margin-inline-end: 1em;
 
-  @media (width > 1024px) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: translateY(-3.5em);
-    grid-template-columns: auto auto;
-    justify-items: last baseline;
-    align-items: center;
-  }
 }
 
 .textbox {
@@ -175,11 +171,11 @@ main {
 
 .submit_btn {
   max-width: 90%;
-  width:100px;
+  width:50px;
   padding: .25em;
   margin-block: 1.5em;
   background-color: whitesmoke;
-  border-radius: 6px;
+  border-radius: 16px;
 
   @media (width> 1024px) {
     margin: 0;

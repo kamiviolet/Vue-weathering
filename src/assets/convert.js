@@ -47,3 +47,19 @@ export function convertDegToDirection(deg) {
   if (deg > 294 || deg <= 336) direction = "SW";
   return direction;
 }
+
+export function formatTime(hour, minute) {
+  let session = "";
+  
+  if (hour >= 12) {
+    hour -= 12;
+    session = "PM";
+  } else {
+    session = "AM";
+  }
+  
+  hour = (hour < 10)? "0" + hour: hour;
+  minute = (minute < 10)? "0" + minute: minute;
+
+  return `${hour}: ${minute} ${session}`;
+}
