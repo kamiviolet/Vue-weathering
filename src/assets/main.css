@@ -9,6 +9,7 @@ body {
   width: 100vw;
   height: 100vh;
   background-attachment: fixed;
+  color: black;
 }
 
 #app {
