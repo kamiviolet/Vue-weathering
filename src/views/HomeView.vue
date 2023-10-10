@@ -50,8 +50,6 @@ watch(searchTerm, ()=>{
   })
 })
 
-onUpdated(() => console.log("update" + displayTemp.value))
-
 onMounted(() => {
   if (("geolocation" in navigator)) {
     navigator.geolocation.getCurrentPosition(success, error);
