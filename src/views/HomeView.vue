@@ -6,6 +6,7 @@ import CurrentStatView from '../components/CurrentStatView.vue';
 import CurrentOtherStatView from '../components/CurrentOtherStatView.vue';
 import DailyContainerView from '../components/DailyContainerView.vue';
 import HourlyContainerView from '../components/HourlyContainerView.vue'
+import TempChart from '../components/charts/TempChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
 
 const location = ref({});
@@ -81,16 +82,6 @@ function getCustomRegion() {
           class="textbox"
           placeholder="Please enter a city name"
         />
-        <!-- 
-          <v-autocomplete
-            v-model="searchTerm"
-            :items="suggestedCities"
-            density="compact"
-            label="Perhaps you are looking for..."
-            class="dropdown"
-            variant="outlined">
-          </v-autocomplete>
-       -->
         <button
           type="submit"
           class="submit_btn"
@@ -124,7 +115,9 @@ function getCustomRegion() {
         </div>
       </div>
     </div>
+    <TempChart :forecast="forecast.slice(0,8).map(f=>({time: f.datetime.substring(5), temp: f.temp}))"/>
     <div class="daily_list">
+      <h3>5 day forecast</h3>
       <DailyContainerView
         :dailyRecord="dailyRecord"
         :displayTemp="displayTemp" />
@@ -138,9 +131,6 @@ main {
   place-self: baseline;
   text-align: center;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
   @media (min-width: 900px) {
     text-align: left;
@@ -197,6 +187,13 @@ main {
 
 .daily_list {
   width: 100%;
+  margin-block: 1em;
+}
+
+h3 {
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 1.5em;
   margin-block: 1em;
 }
 

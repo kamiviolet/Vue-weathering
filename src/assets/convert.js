@@ -51,8 +51,10 @@ export function convertDegToDirection(deg) {
 export function formatTime(hour, minute) {
   let session = "";
   
-  if (hour >= 12) {
+  if (hour > 12) {
     hour -= 12;
+    session = "PM";
+  } if (hour == 12) {
     session = "PM";
   } else {
     session = "AM";
