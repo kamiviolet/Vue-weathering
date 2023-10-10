@@ -54,7 +54,7 @@ export function formatTime(hour, minute) {
   if (hour > 12) {
     hour -= 12;
     session = "PM";
-  } if (hour == 12) {
+  } else if (hour == 12) {
     session = "PM";
   } else {
     session = "AM";
