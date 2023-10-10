@@ -50,7 +50,7 @@ watch(searchTerm, ()=>{
   })
 })
 
-onUpdated(() => console.log("update" + displayTemp))
+onUpdated(() => console.log("update" + displayTemp.value))
 
 onMounted(() => {
   if (("geolocation" in navigator)) {
