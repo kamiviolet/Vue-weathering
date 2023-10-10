@@ -50,8 +50,6 @@ watch(searchTerm, ()=>{
   })
 })
 
-onUpdated(() => displayTemp.value)
-
 onMounted(() => {
   if (("geolocation" in navigator)) {
     navigator.geolocation.getCurrentPosition(success, error);
@@ -76,6 +74,7 @@ function getCustomRegion() {
   <main>
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">
+      {{ displayTemp }}
       <DisplayToggle :displayTemp="displayTemp" @toggle="(display)=>displayTemp=display" />
       <SearchBoxView>
         <form
