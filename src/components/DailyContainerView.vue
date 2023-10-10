@@ -46,7 +46,7 @@ const props = defineProps({
         {{
           displayTemp == 'celcius'?
           convertKevinToCelcius(getLowestTempByDay(day.temp_range)) + 'C°':
-          convertKevinToFahrenheit(getLowestTempByDay(day.temp_range)) + + 'F°'
+          convertKevinToFahrenheit(getLowestTempByDay(day.temp_range)) + 'F°'
         }}
         </p>
       </template>

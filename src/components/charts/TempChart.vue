@@ -20,15 +20,14 @@ function createChart() {
   const paddingInline = 40;
   const paddingBlock = 20;
   const data = props.forecast.map(d => {
-    console.log(d)
     return ({...d, temp: convertKevinToCelcius(d.temp)})
   });
 
   const svg = d3
     .select("svg")
     .attr("id", "tempchart")
-    .attr("viewBox", `0 0 ${width + paddingInline} ${height + paddingBlock*2} `);
-    
+    .attr("viewBox", `0 0 ${width + paddingInline} ${height + paddingBlock*2} `)
+
   const g = svg.append("g");
 
   const parseTime = d3.timeParse("%d/%m/%Y, %H");

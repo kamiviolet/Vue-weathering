@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onUpdated, ref, watch } from 'vue';
 import { convertKevinToCelcius, convertKevinToFahrenheit } from '../assets/convert';
 import { getDailyRecord, getForecastByCoords, getForecastByCity, getSuggestedDropDown } from '../assets/utils';
 import CurrentStatView from '../components/CurrentStatView.vue';
@@ -8,12 +8,13 @@ import DailyContainerView from '../components/DailyContainerView.vue';
 import HourlyContainerView from '../components/HourlyContainerView.vue'
 import TempChart from '../components/charts/TempChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
+import DisplayToggle from '../components/DisplayToggle.vue';
 
 const location = ref({});
 const region = ref('')
 const forecast = ref([]);
 const dailyRecord = ref([]);
-const displayTemp = ref("celcius");
+const displayTemp = ref("frahrenheit");
 const searchTerm = ref('');
 const suggestedCities = ref([]);
 
@@ -72,24 +73,28 @@ function getCustomRegion() {
 <template>
   <main>
     <p class="warning">{{ errorMsg }}</p>
-    <SearchBoxView>
-      <form
-      @submit.prevent="getCustomRegion"
-      class="search_form"
-      >
-        <input
-          v-model="searchTerm"
-          class="textbox"
-          placeholder="Please enter a city name"
-        />
-        <button
-          type="submit"
-          class="submit_btn"
-          >
-          &#x1F50E
-        </button>
-      </form>
-    </SearchBoxView>
+    <section class="setting">
+      <DisplayToggle :displayTemp="displayTemp" @toggle="(display)=>displayTemp=display" />
+      <SearchBoxView>
+        <form
+        @submit.prevent="getCustomRegion"
+        class="search_form"
+        >
+          <input
+            v-model="searchTerm"
+            class="textbox"
+            placeholder="Please enter a city name"
+          />
+          <button
+            type="submit"
+            class="submit_btn"
+            >
+            &#x1F50E
+          </button>
+        </form>
+      </SearchBoxView>
+    </section>
+
     <CurrentStatView
       v-if="location"
       :region="region"
@@ -136,19 +141,28 @@ main {
     text-align: left;
   }
 }
-
-.search_form {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-items: last baseline;
-  align-items: center;
-  font-size: .9em;
+.setting {
   position: absolute;
   top: 0;
   right: 0;
-  margin-block: 1em;
+  margin-block: 1.25em;
   margin-inline-end: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
 
+.search_form {
+  display: grid;
+  width: 200px;
+  margin-block: 1.5em;
+  grid-template-columns: 150px auto;
+  justify-items: first baseline;
+  align-items: center;
+  font-size: .9em;
+  button {
+    justify-self: last baseline;
+  }
 }
 
 .textbox {
