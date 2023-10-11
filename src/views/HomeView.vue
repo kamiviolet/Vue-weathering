@@ -118,7 +118,6 @@ function setCustomRegion() {
 
 <template>
   <main>
-    {{ formattedDailyRecord }}
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">
       <DisplayToggle
