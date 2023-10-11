@@ -1,7 +1,11 @@
 <script setup>
-import { onMounted, onUpdated, ref, watch } from 'vue';
-import { convertKevinToCelcius, convertKevinToFahrenheit } from '../assets/convert';
-import { getDailyRecord, getForecastByCoords, getForecastByCity, getSuggestedDropDown } from '../assets/utils';
+import { onMounted, reactive, ref, watch, computed } from 'vue';
+import {
+  getDailyRecord,
+  getForecastByCoords,
+  getForecastByCity,
+  getSuggestedDropDown,
+  formatTemp } from '../assets/utils';
 import CurrentStatView from '../components/CurrentStatView.vue';
 import CurrentOtherStatView from '../components/CurrentOtherStatView.vue';
 import DailyContainerView from '../components/DailyContainerView.vue';
@@ -11,34 +15,74 @@ import SearchBoxView from '../components/SearchBoxView.vue';
 import DisplayToggle from '../components/DisplayToggle.vue';
 
 const location = ref({});
-const region = ref('')
-const forecast = ref([]);
-const dailyRecord = ref([]);
-const displayTemp = ref("celcius");
+const customRegion = ref("");
+const forecast = reactive({
+  region: {
+    name: "",
+    country: "",
+    timezone: 0
+  },
+  totalList: [],
+  dailyRecord: {
+    weather_range: [],
+    temp_range: [],
+    most_frequent_weather: "",
+    max_temp_formatted: "",
+    min_temp_formatted: ""
+  },
+  displayTemp: 'celcius'
+})
 const searchTerm = ref('');
 const suggestedCities = ref([]);
-
 const errorMsg = ref('');
 
-const success = (position) => {
-  location.value = {
-    longitude: position.coords.longitude,
-    latitude: position.coords.latitude,
-  };
-}
-
-const error = (error) => {
-  gettingLocation.value = false;
-  errorMsg.value = error.message;
-}
+const formattedDailyRecord = computed(() => {
+  return Object.fromEntries(
+    Object.entries(forecast.dailyRecord).map(([k,v]) => {
+      v = {
+        ...v,
+        max_temp_formatted: formatTemp(
+          Math.max(...v.temp_range), forecast.displayTemp),
+        min_temp_formatted: formatTemp(
+          Math.min(...v.temp_range), forecast.displayTemp),
+      }
+      return [k,v];
+    })
+  )
+})
 
 watch(location, () => {
   getForecastByCoords(location.value)
     .then(({city, record}) => {
-      forecast.value = record;
-      region.value = [city.name, city.country, city.timezone];
+      forecast.totalList = record.map((e) => ({
+        ...e,
+        temp_format: computed(() => formatTemp(e.temp, forecast.displayTemp)),
+        feels_like: computed(() => formatTemp(e.feels_like, forecast.displayTemp)),
+      }));
+      forecast.region = {
+        name: city.name,
+        country: city.country,
+        timezone: city.timezone
+      };
     })
-    .then(()=>dailyRecord.value = getDailyRecord(forecast.value))
+    .then(()=>forecast.dailyRecord = getDailyRecord(forecast.totalList))
+})
+
+watch(customRegion, ()=>{
+  getForecastByCity(customRegion.value)
+    .then(({city, record}) => {
+      forecast.totalList = record.map((e) => ({
+        ...e,
+        temp_format: computed(() => formatTemp(e.temp, forecast.displayTemp)),
+        feels_like: computed(() => formatTemp(e.feels_like, forecast.displayTemp)),
+      }));
+      forecast.region = {
+        name: city.name,
+        country: city.country,
+        timezone: city.timezone
+      };
+    })
+      .then(()=>forecast.dailyRecord = getDailyRecord(forecast.totalList))
 })
 
 watch(searchTerm, ()=>{
@@ -52,32 +96,37 @@ watch(searchTerm, ()=>{
 
 onMounted(() => {
   if (("geolocation" in navigator)) {
-    navigator.geolocation.getCurrentPosition(success, error);
-  };
-  getCustomRegion();
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        location.value = {
+          longitude: position.coords.longitude,
+          latitude: position.coords.latitude,
+        };
+      }, 
+      (error) => {
+        gettingLocation.value = false;
+        errorMsg.value = error.message;
+      }
+  )};
+  setCustomRegion();
 })
 
-function getCustomRegion() {
-  if (searchTerm.value) {
-    return getForecastByCity(searchTerm.value)
-      .then(({city, record}) => {
-          forecast.value = record;
-          region.value = [city.name, city.country, city.timezone];
-        })
-      .then(()=>dailyRecord.value = getDailyRecord(forecast.value))
-  }
+function setCustomRegion() {
+  customRegion.value = searchTerm.value
 }
-
 </script>
 
 <template>
   <main>
+    {{ formattedDailyRecord }}
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">
-      <DisplayToggle :displayTemp="displayTemp" @toggle="(display)=>displayTemp=display" />
+      <DisplayToggle
+      :displayTemp="forecast.displayTemp"
+      @toggle="(display)=>forecast.displayTemp=display" />
       <SearchBoxView>
         <form
-        @submit.prevent="getCustomRegion"
+        @submit.prevent="setCustomRegion"
         class="search_form"
         >
           <input
@@ -97,35 +146,31 @@ function getCustomRegion() {
 
     <CurrentStatView
       v-if="location"
-      :region="region"
-      :temp="displayTemp == 'celcius' ?
-      convertKevinToCelcius(forecast[0].temp) + 'C°' :
-      convertKevinToFahrenheit(forecast[0].temp) + 'F°'"
-      :weather="forecast[0].weather"
-      :feels_like="displayTemp == 'celcius' ?
-      convertKevinToCelcius(forecast[0].feels_like) + 'C°' :
-      convertKevinToFahrenheit(forecast[0].feels_like) + 'F°'"
-      :display="displayTemp" class="current" />
+      :region="forecast.region"
+      :temp_format="forecast.totalList[0].temp_format"
+      :weather="forecast.totalList[0].weather"
+      :feels_like="forecast.totalList[0].feels_like"
+      class="current" />
     <div class="summary">
       <CurrentOtherStatView
         v-if="forecast"
-        :humidity="forecast[0].humidity"
-        :pressure="forecast[0].pressure"
-        :wind="forecast[0].wind" />
+        :humidity="forecast.totalList[0].humidity"
+        :pressure="forecast.totalList[0].pressure"
+        :wind="forecast.totalList[0].wind" />
       <div class="hourly_wrapper">
         <div class="hourly_list">
         <HourlyContainerView
-          :forecast="forecast"
-          :displayTemp="displayTemp" />
+          :forecast="forecast.totalList" />
         </div>
       </div>
     </div>
-    <TempChart :forecast="forecast.slice(0,8).map(f=>({time: f.datetime.substring(5), temp: f.temp}))"/>
+    <TempChart
+    :forecast="forecast.totalList.slice(0,8).map(
+      f=>({time: f.datetime.substring(5), temp: f.temp}))"/>
     <div class="daily_list">
       <h3>5 day forecast</h3>
       <DailyContainerView
-        :dailyRecord="dailyRecord"
-        :displayTemp="displayTemp" />
+        :dailyRecord="formattedDailyRecord" />
     </div>
   </main>
 </template>

@@ -2,30 +2,33 @@
 import LocalTimeView from './LocalTimeView.vue';
 
 const props = defineProps({
-  region: [String, Number],
-  temp: String,
+  region: {
+    name: String,
+    city: String,
+    timezone: Number
+  },
+  temp_format: String,
   weather: {
     icon: String,
     main: String
   },
   feels_like: String,
-  display: String,
 })
 </script>
 
 <template>
   <div class="current_stat">
     <div class="location">
-      <h1>{{ region[0] }}</h1>
-      <span>{{ region[1] }}</span>
-      <LocalTimeView :timezone="region[2]"/>
+      <h1>{{ region.name }}</h1>
+      <span>{{ region.country }}</span>
+      <LocalTimeView :timezone="region.timezone"/>
     </div>
     <div class="weather">
       <img :src=weather.icon :alt=weather.main />
     </div>
     <div class="temp">
       <p class="label">Temperature</p>
-      <p class="value">{{ temp }}</p>
+      <p class="value">{{ temp_format }}</p>
     </div>
     <div class="feels_like">
       <p class="label">Feels like</p>

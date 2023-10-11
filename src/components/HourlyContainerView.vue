@@ -1,12 +1,11 @@
 <script setup>
 import HourlyView from '../components/HourlyView.vue';
-import { convertKevinToCelcius, convertKevinToFahrenheit } from '../assets/convert';
 
 const props = defineProps({
-  displayTemp: String,
   forecast: {
     temp: Number,
-    feels_like: Number,
+    temp_format: String,
+    feels_like: String,
     humidity: Number,
     weather: {
       icon: String,
@@ -23,9 +22,9 @@ const props = defineProps({
 
 <template>
   <div
-    v-if="forecast.length != 0"
-    v-for="timeslot of forecast.slice(0, 8)"
-    class="hourly_card">
+  v-if="forecast.length != 0"
+  v-for="timeslot of forecast.slice(0, 8)"
+  class="hourly_card">
     <HourlyView>
       <template #time>
         <p>
@@ -42,15 +41,11 @@ const props = defineProps({
         </p>
       </template>
       <template #weather class="weather">
-        <img :src=timeslot.weather.icon :alt=timeslot.weather.main />
+        <img :src="timeslot.weather.icon" :alt="timeslot.weather.main" />
       </template>
       <template #temp>
         <p>
-          {{
-          displayTemp == 'celcius'?
-          convertKevinToCelcius(timeslot.temp) + 'C°' :
-          convertKevinToFahrenheit(timeslot.temp) + 'F°'
-          }}
+          {{ timeslot.temp_format }}
         </p>
       </template>
     </HourlyView>
