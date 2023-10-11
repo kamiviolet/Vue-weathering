@@ -1,27 +1,34 @@
 <script setup>
 import * as d3 from "d3";
-import { onMounted } from "vue";
-import { convertKevinToCelcius } from "../../assets/convert";
+import { ref, onMounted, watch, computed, onUpdated } from "vue";
+import { formatTemp } from "../../assets/utils";
 
 const props = defineProps({
   forecast: {
-    time: String,
-    temp: Number
+    type: [Object],
+    required: true
+  },
+  displayTemp: String
+})
+
+const chartdata = ref(computed(()=>props.forecast.map(e => ({
+  datetime: e.datetime,
+  temp_format: parseInt(formatTemp(e.temp, props.displayTemp))
+}))))
+
+watch(chartdata, createChart)
+
+onMounted(
+  () => {
+    createChart(chartdata.value)
   }
-})
+)
 
-onMounted(() => {
-  createChart()
-})
-
-function createChart() {
+function createChart(dataset) {
   const width = 600;
   const height = 300;
   const paddingInline = 40;
   const paddingBlock = 20;
-  const data = props.forecast.map(d => {
-    return ({...d, temp: convertKevinToCelcius(d.temp)})
-  });
 
   const svg = d3
     .select("svg")
@@ -30,26 +37,26 @@ function createChart() {
 
   const g = svg.append("g");
 
-  const parseTime = d3.timeParse("%d/%m/%Y, %H");
+  const parseTime = d3.timeParse("%a, %d/%m/%Y, %H");
 
   const xScale = d3
     .scaleTime()
     .domain(
-      d3.extent(data, (d) => parseTime(d.time))
+      d3.extent(dataset, (d) => parseTime(d.datetime))
     )
-    .range([0, width]);
+    .range([0, width])
 
   const yScale = d3
     .scaleLinear()
     .domain(
-      d3.extent(data, (d) => d.temp)
+      [d3.min(dataset, d =>parseInt(d.temp_format) - 1), d3.max(dataset, d => parseInt(d.temp_format) + 1)]
     )
     .range([height, 0]);
 
   const line = d3
     .line()
-    .x((d) => xScale(parseTime(d.time)))
-    .y((d) => yScale(d.temp));
+    .x((d) => xScale(parseTime(d.datetime)))
+    .y((d) => yScale(parseInt(d.temp_format)));
 
   const XAxisGenerator = d3
     .axisBottom(xScale)
@@ -58,36 +65,37 @@ function createChart() {
     .axisLeft(yScale)
 
   g.append("g")
-    .attr("transform", `translate(${paddingInline}, ${height+paddingBlock})`)
+    .attr(":transform", `translate(${paddingInline}, ${height+paddingBlock})`)
     .attr("id", "x-axis")
     .attr("class", "x-axis")
     .call(XAxisGenerator)
 
   g.append("g")
-    .attr("transform", `translate(${paddingInline},${paddingBlock})`)
+    .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
     .call(YAxisGenerator)
     .append("text")
     .attr("fill", "#000")
     .attr("transform", "rotate(-90)")
-    .attr("y", 10)
-    .attr("x", -125)
-    .attr("dy", "1em")
+    .attr("y", 20)
+    .attr("x", -120)
     .attr("text-anchor", "end")
-    .text("Temperature (C°)");    
+    .text("Temperature");    
 
   g.append("path")
-    .datum(data)
-    .attr("transform", `translate(${paddingInline},${paddingBlock})`)
+    .datum(dataset)
+    .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
     .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 2)
-    .attr("d", line);
+    .attr(":d", line);
 }
 
 </script>
 
 <template>
-      <h3>Daily temperature change</h3>
+  <p></p>
+  {{ chartdata }}
+  <h3>Daily temperature change</h3>
   <div class="tempChart">
     <svg></svg>
   </div>

@@ -30,7 +30,7 @@ const forecast = reactive({
     max_temp_formatted: "",
     min_temp_formatted: ""
   },
-  displayTemp: 'celcius'
+  displayTemp: 'celcius',
 })
 const searchTerm = ref('');
 const suggestedCities = ref([]);
@@ -42,9 +42,9 @@ const formattedDailyRecord = computed(() => {
       v = {
         ...v,
         max_temp_formatted: formatTemp(
-          Math.max(...v.temp_range), forecast.displayTemp),
+          Math.max(...v?.temp_range), forecast.displayTemp),
         min_temp_formatted: formatTemp(
-          Math.min(...v.temp_range), forecast.displayTemp),
+          Math.min(...v?.temp_range), forecast.displayTemp),
       }
       return [k,v];
     })
@@ -104,7 +104,6 @@ onMounted(() => {
         };
       }, 
       (error) => {
-        gettingLocation.value = false;
         errorMsg.value = error.message;
       }
   )};
@@ -113,6 +112,7 @@ onMounted(() => {
 
 function setCustomRegion() {
   customRegion.value = searchTerm.value
+  searchTerm.value = ""
 }
 </script>
 
@@ -164,8 +164,8 @@ function setCustomRegion() {
       </div>
     </div>
     <TempChart
-    :forecast="forecast.totalList.slice(0,8).map(
-      f=>({time: f.datetime.substring(5), temp: f.temp}))"/>
+    :forecast="forecast.totalList.slice(0, 8)"
+    :displayTemp="forecast.displayTemp"/>
     <div class="daily_list">
       <h3>5 day forecast</h3>
       <DailyContainerView
