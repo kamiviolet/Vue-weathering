@@ -13,6 +13,7 @@ import HourlyContainerView from '../components/HourlyContainerView.vue'
 import TempChart from '../components/charts/TempChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
 import DisplayToggle from '../components/DisplayToggle.vue';
+import Background from '../components/Background.vue';
 
 const location = ref({});
 const customRegion = ref("");
@@ -37,20 +38,27 @@ const suggestedCities = ref([]);
 const errorMsg = ref('');
 const loading = ref(false);
 
+onBeforeMount(() => {
+  loading.value = true;
+})
 
-const formattedDailyRecord = computed(() => {
-  return Object.fromEntries(
-    Object.entries(forecast.dailyRecord).map(([k,v]) => {
-      v = {
-        ...v,
-        max_temp_formatted: formatTemp(
-          Math.max(...v?.temp_range), forecast.displayTemp),
-        min_temp_formatted: formatTemp(
-          Math.min(...v?.temp_range), forecast.displayTemp),
+onMounted(() => {
+  if (("geolocation" in navigator)) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        loading.value = false;
+        console.log(loading.value, "loaded")
+
+        location.value = {
+          longitude: position.coords.longitude,
+          latitude: position.coords.latitude,
+        };
+      }, 
+      (error) => {
+        errorMsg.value = error.message;
       }
-      return [k,v];
-    })
-  )
+  )};
+  setCustomRegion();
 })
 
 watch(location, () => {
@@ -104,27 +112,19 @@ watch(searchTerm, ()=>{
   })
 })
 
-onBeforeMount(() => {
-  loading.value = true;
-})
-
-onMounted(() => {
-  if (("geolocation" in navigator)) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        loading.value = false;
-        console.log(loading.value, "loaded")
-
-        location.value = {
-          longitude: position.coords.longitude,
-          latitude: position.coords.latitude,
-        };
-      }, 
-      (error) => {
-        errorMsg.value = error.message;
+const formattedDailyRecord = computed(() => {
+  return Object.fromEntries(
+    Object.entries(forecast.dailyRecord).map(([k,v]) => {
+      v = {
+        ...v,
+        max_temp_formatted: formatTemp(
+          Math.max(...v?.temp_range), forecast.displayTemp),
+        min_temp_formatted: formatTemp(
+          Math.min(...v?.temp_range), forecast.displayTemp),
       }
-  )};
-  setCustomRegion();
+      return [k,v];
+    })
+  )
 })
 
 function setCustomRegion() {
@@ -134,6 +134,8 @@ function setCustomRegion() {
 </script>
 
 <template>
+  <Background
+  :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2])" />
   <h2 v-if="loading" class="loading">loading...</h2>
   <main v-else>
     <p class="warning">{{ errorMsg }}</p>
@@ -198,7 +200,8 @@ main {
   place-self: baseline;
   text-align: center;
   width: 100%;
-
+  position: relative;
+  padding-inline: 0.75em;
   @media (min-width: 900px) {
     text-align: left;
   }
@@ -213,17 +216,17 @@ main {
   position: absolute;
   top: 0;
   right: 0;
-  margin-block: 1.25em;
-  margin-inline-end: 1em;
   display: flex;
   flex-direction: column;
   align-items: end;
+  transform: translateY(-6.5em);
+  padding-inline: .75em;
 }
 
 .search_form {
   display: grid;
   width: 200px;
-  margin-block: 1.5em;
+  height: 55px;
   grid-template-columns: 150px auto;
   justify-items: first baseline;
   align-items: center;
@@ -270,6 +273,8 @@ main {
 .daily_list {
   width: 100%;
   margin-block: 1em;
+  font-weight: 600;
+  color: black;
 }
 
 h3 {
@@ -284,5 +289,6 @@ h3 {
   grid-column-end: 3;
   display: flex;
   margin-block: 1em;
+  color: black;
 }
 </style>

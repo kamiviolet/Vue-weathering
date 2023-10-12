@@ -77,6 +77,7 @@ function createChart(dataset) {
   g.append("g")
     .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
     .attr("id", "y-axis")
+    .attr("class", "y-axis")
     .call(YAxisGenerator)
     .append("text")
     .attr("fill", "#000")
@@ -111,5 +112,9 @@ function createChart(dataset) {
   max-width: 700px;
   margin: 0 auto;
   margin-block: 3em;
+}
+
+.x-axis, .y-axis {
+  color: black;
 }
 </style>

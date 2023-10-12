@@ -16,12 +16,14 @@ function getLocalTime() {
 
   const UTCHour = currentTime.getUTCHours();
   const localHour = normaliseConvertedHours(UTCHour + offsetHour);
+  console.log(UTCHour, 'utc')
+  console.log(UTCHour)
+
   const minutes = currentTime.getUTCMinutes();
 
   localTime.value = formatTime(localHour, minutes);
   setTimeout(getLocalTime, 1000);
 }
-
 onMounted(() => {
   getLocalTime();
 })

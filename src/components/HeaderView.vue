@@ -9,13 +9,17 @@ defineProps({
 
 <template>
   <div class="greetings">
-    <h2 class="green">{{ msg }}</h2>
+    <h2>{{ msg }}</h2>
   </div>
 </template>
 
 <style scoped>
 .greetings {
-  margin-block: 1em;
   text-align: left;
+  background-color: rgba(240, 248, 255, 0.75);
+  color: black;
+  width:min-content;
+  padding-inline: 1em;
+  margin-left: -1rem;
 }
 </style>

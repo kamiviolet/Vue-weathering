@@ -24,24 +24,20 @@ import FooterView from './components/FooterView.vue';
 header {
   line-height: 1.5;
   width: 100%;
+  padding: .75em;
+  color: gray;
+  font-weight: 700;
 }
 
 nav {
-  width: inherit;
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+  width: 110%;
+  text-align: left;
+  margin-left: -1rem;
+  margin-top: .5em;
+  font-size: 1rem;
+  color: black;
+  background: rgba(255, 255, 255, 0.5);
+  padding: .75em 0;
 }
 
 nav a {
