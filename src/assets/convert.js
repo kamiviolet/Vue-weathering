@@ -22,7 +22,7 @@ export function convertToLocalTime(str, timezoneOffset) {
   let date = localTime[0];
   let time = localTime[1];
   time = +time.substring(0,2) + convertTimezoneToHours(timezoneOffset);
-  let [normalisedDate, normalisedTime] = normaliseConvertedHours(date, time);
+  let [normalisedDate, normalisedTime] = normaliseConvertedHours(time, date);
   normalisedTime += ":00:00"
 
   return [normalisedDate, normalisedTime].join(" ")
@@ -32,7 +32,7 @@ export function convertTimezoneToHours(second) {
   return second / 60 /60
 }
 
-export function normaliseConvertedHours(date, hour) {
+export function normaliseConvertedHours(hour, date="1970-10-10") {
   let [year, month, day] = date.split("-")
   if (hour >= 24) {
     if (hour > 24) {

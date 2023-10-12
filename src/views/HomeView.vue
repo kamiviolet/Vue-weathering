@@ -47,7 +47,6 @@ onMounted(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         loading.value = false;
-        console.log(loading.value, "loaded")
 
         location.value = {
           longitude: position.coords.longitude,

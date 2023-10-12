@@ -15,9 +15,7 @@ function getLocalTime() {
   offset.value = offsetHour;
 
   const UTCHour = currentTime.getUTCHours();
-  const localHour = normaliseConvertedHours(UTCHour + offsetHour);
-  console.log(UTCHour, 'utc')
-  console.log(UTCHour)
+  const localHour = normaliseConvertedHours(UTCHour + offsetHour)[1];
 
   const minutes = currentTime.getUTCMinutes();
 
