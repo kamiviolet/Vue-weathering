@@ -17,22 +17,35 @@ export function convertToDateString(dt_str) {
   return new Date(dt_str).toLocaleDateString("en-GB", options);
 }
 
+export function convertToLocalTime(str, timezoneOffset) {
+  const localTime = str.split(" ")
+  let date = localTime[0];
+  let time = localTime[1];
+  time = +time.substring(0,2) + convertTimezoneToHours(timezoneOffset);
+  let [normalisedDate, normalisedTime] = normaliseConvertedHours(date, time);
+  normalisedTime += ":00:00"
+
+  return [normalisedDate, normalisedTime].join(" ")
+}
+
 export function convertTimezoneToHours(second) {
   return second / 60 /60
 }
 
-export function convertToLocalTime(str, seconds) {
-  const localTime = str.split(" ")
-  localTime[1] = +localTime[1].substring(0,2) + convertTimezoneToHours(seconds)
-  localTime[1] = normaliseConvertedHours(localTime[1]) + ":00:00"
-  return localTime.join(" ")
-}
-
-export function normaliseConvertedHours(num) {
-  if (num == 24) return 0;
-  if (num > 24) return num - 24;
-  if (num < 0) return 24 + num; 
-  return num;
+export function normaliseConvertedHours(date, hour) {
+  let [year, month, day] = date.split("-")
+  if (hour >= 24) {
+    if (hour > 24) {
+      hour -= 24;
+    } else {
+      hour = 0;
+    }
+    day = +day + 1;
+  } else if (hour < 0) {
+    hour = 24 + hour;
+    day = +day - 1;
+  } 
+  return [[year, month, day].join("-"), hour]
 }
 
 export function convertDegToDirection(deg) {

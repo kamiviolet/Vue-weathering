@@ -89,7 +89,7 @@ export async function getForecast(type, location) {
     return getCountryByCode(city.country)
     .then(country => {
       record = record.map((e) => ({
-        datetime: convertToDateString(convertToLocalTime(e.dt_txt, city.timezone)),
+        datetime: `${convertToDateString(convertToLocalTime(e.dt_txt, city.timezone))}`,
         temp: +e.main.temp,
         feels_like: +e.main.feels_like,
         humidity: +e.main.humidity,

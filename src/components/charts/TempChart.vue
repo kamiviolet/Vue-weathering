@@ -30,6 +30,10 @@ function createChart(dataset) {
   const paddingInline = 40;
   const paddingBlock = 20;
 
+  d3.select("#x-axis").remove()
+  d3.select("#y-axis").remove()
+  d3.selectAll("path").remove()
+
   const svg = d3
     .select("svg")
     .attr("id", "tempchart")
@@ -72,6 +76,7 @@ function createChart(dataset) {
 
   g.append("g")
     .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
+    .attr("id", "y-axis")
     .call(YAxisGenerator)
     .append("text")
     .attr("fill", "#000")
@@ -93,8 +98,6 @@ function createChart(dataset) {
 </script>
 
 <template>
-  <p></p>
-  {{ chartdata }}
   <h3>Daily temperature change</h3>
   <div class="tempChart">
     <svg></svg>
