@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref, watch, computed } from 'vue';
+import { onMounted, reactive, ref, watch, computed, onBeforeMount } from 'vue';
 import {
   getDailyRecord,
   getForecastByCoords,
@@ -35,6 +35,8 @@ const forecast = reactive({
 const searchTerm = ref('');
 const suggestedCities = ref([]);
 const errorMsg = ref('');
+const loading = ref(false);
+
 
 const formattedDailyRecord = computed(() => {
   return Object.fromEntries(
@@ -52,8 +54,12 @@ const formattedDailyRecord = computed(() => {
 })
 
 watch(location, () => {
+  loading.value = true;
+
   getForecastByCoords(location.value)
     .then(({city, record}) => {
+      loading.value = false;
+
       forecast.totalList = record.map((e) => ({
         ...e,
         temp_format: computed(() => formatTemp(e.temp, forecast.displayTemp)),
@@ -69,8 +75,12 @@ watch(location, () => {
 })
 
 watch(customRegion, ()=>{
+  loading.value = true;
+
   getForecastByCity(customRegion.value)
     .then(({city, record}) => {
+      loading.value = false;
+
       forecast.totalList = record.map((e) => ({
         ...e,
         temp_format: computed(() => formatTemp(e.temp, forecast.displayTemp)),
@@ -94,10 +104,17 @@ watch(searchTerm, ()=>{
   })
 })
 
+onBeforeMount(() => {
+  loading.value = true;
+})
+
 onMounted(() => {
   if (("geolocation" in navigator)) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        loading.value = false;
+        console.log(loading.value, "loaded")
+
         location.value = {
           longitude: position.coords.longitude,
           latitude: position.coords.latitude,
@@ -117,7 +134,8 @@ function setCustomRegion() {
 </script>
 
 <template>
-  <main>
+  <h2 v-if="loading" class="loading">loading...</h2>
+  <main v-else>
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">
       <DisplayToggle
@@ -185,6 +203,12 @@ main {
     text-align: left;
   }
 }
+
+.loading {
+  font-size: 4em;
+  text-align: center;
+}
+
 .setting {
   position: absolute;
   top: 0;
