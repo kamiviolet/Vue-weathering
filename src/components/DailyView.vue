@@ -27,7 +27,6 @@
 
 .date{
   justify-self: first baseline;
-
   grid-column: 1/2;
   grid-row: 2/3;
   @media (width > 480px) {

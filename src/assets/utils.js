@@ -81,7 +81,6 @@ export function getDailyRecord(list) {
       pressureRange = [list[i].pressure];
     }
   }
-  console.log(record)
   return record;
 }
 
@@ -148,6 +147,5 @@ export function getLocalTime(offsetHour) {
   const localHour = normaliseConvertedHours(UTCHour + offsetHour)[1];
 
   const minutes = currentTime.getUTCMinutes();
-  console.log(offsetHour)
   return formatTime(localHour, minutes);
 }

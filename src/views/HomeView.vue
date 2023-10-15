@@ -43,8 +43,6 @@ onBeforeMount(() => {
   loading.value = true;
 })
 
-convertTimezoneToHours(forecast.region.timezone)
-
 onMounted(() => {
   if (("geolocation" in navigator)) {
     navigator.geolocation.getCurrentPosition(
@@ -188,8 +186,8 @@ function setCustomRegion() {
     <TempChart
     :forecast="forecast.totalList.slice(0, 8)"
     :displayTemp="forecast.displayTemp"/>
+    <h3>5 day forecast</h3>
     <div class="daily_list">
-      <h3>5 day forecast</h3>
       <DailyContainerView
         :dailyRecord="formattedDailyRecord" />
     </div>
@@ -218,17 +216,19 @@ main {
   position: absolute;
   top: 0;
   right: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: end;
+  justify-items: last baseline;
   transform: translateY(-6.5em);
   padding-inline: .75em;
+  height: 5em;
+  gap: .75em
 }
 
 .search_form {
   display: grid;
   width: 200px;
-  height: 55px;
+
   grid-template-columns: 150px auto;
   justify-items: first baseline;
   align-items: center;
@@ -250,7 +250,6 @@ main {
   max-width: 90%;
   width:50px;
   padding: .25em;
-  margin-block: 1.5em;
   background-color: whitesmoke;
   border-radius: 16px;
 
@@ -269,6 +268,8 @@ main {
   margin-block: 1em;
   font-weight: 600;
   color: black;
+  background-color: #cacacab0;
+  border-radius: 16px;
 }
 
 h3 {

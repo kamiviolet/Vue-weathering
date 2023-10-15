@@ -3,6 +3,7 @@ import HourlyView from '../components/HourlyView.vue';
 
 const props = defineProps({
   forecast: {
+    datetime: String,
     temp: Number,
     temp_format: String,
     feels_like: String,
@@ -32,10 +33,17 @@ const props = defineProps({
         </p>
       </template>
       <template #newday>
-        <p v-if="index !== forecast.length">
+        <p v-if="index == 0">
           {{
             forecast[index].datetime.split(", ")[0] != forecast[index+1].datetime.split(", ")[0] ?
-            forecast[index+1].datetime.substring(0, 7) :
+            forecast[index].datetime.substring(0, 7) :
+            "--"
+          }}
+        </p>
+        <p v-if="index !== 0">
+          {{
+            forecast[index].datetime.split(", ")[0] != forecast[index-1].datetime.split(", ")[0] ?
+            forecast[index].datetime.substring(0, 7) :
             "--"
           }}
         </p>
