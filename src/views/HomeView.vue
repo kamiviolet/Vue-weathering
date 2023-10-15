@@ -13,6 +13,7 @@ import TempChart from '../components/charts/TempChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
 import DisplayToggle from '../components/DisplayToggle.vue';
 import Background from '../components/Background.vue';
+import { convertTimezoneToHours } from '../assets/convert';
 
 const location = ref({});
 const customRegion = ref("");
@@ -20,7 +21,8 @@ const forecast = reactive({
   region: {
     name: "",
     country: "",
-    timezone: 0
+    timezone: 0,
+    offset: null
   },
   totalList: [],
   dailyRecord: {
@@ -41,6 +43,8 @@ onBeforeMount(() => {
   loading.value = true;
 })
 
+convertTimezoneToHours(forecast.region.timezone)
+
 onMounted(() => {
   if (("geolocation" in navigator)) {
     navigator.geolocation.getCurrentPosition(
@@ -51,6 +55,7 @@ onMounted(() => {
           longitude: position.coords.longitude,
           latitude: position.coords.latitude,
         };
+        
       }, 
       (error) => {
         errorMsg.value = error.message;
@@ -76,7 +81,8 @@ watch(location, () => {
       forecast.region = {
         name: city.name,
         country: city.country,
-        timezone: city.timezone
+        timezone: city.timezone,
+        offset: computed(() => convertTimezoneToHours(city.timezone)),
       };
     })
     .then(()=>forecast.dailyRecord = getDailyRecord(forecast.totalList))
@@ -97,7 +103,8 @@ watch(customRegion, ()=>{
       forecast.region = {
         name: city.name,
         country: city.country,
-        timezone: city.timezone
+        timezone: city.timezone,
+        offset: computed(() => convertTimezoneToHours(city.timezone)),
       };
     })
       .then(()=>forecast.dailyRecord = getDailyRecord(forecast.totalList))

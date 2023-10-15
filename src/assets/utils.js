@@ -2,7 +2,7 @@ import {
   convertKevinToCelcius,
   convertKevinToFahrenheit,
   convertToDateString,
-  convertToLocalTime } from '../assets/convert';
+  convertToLocalTime, normaliseConvertedHours, formatTime } from '../assets/convert';
 
 export function getTemps(list) {
   return list.map((e) => e.temp);
@@ -140,4 +140,14 @@ export async function getCountryByCode(code) {
   .then(d => d[1][0])
   .then(result => result.name)
   .catch((error) => console.warn(error));
+}
+
+export function getLocalTime(offsetHour) {
+  const currentTime = new Date();
+  const UTCHour = currentTime.getUTCHours();
+  const localHour = normaliseConvertedHours(UTCHour + offsetHour)[1];
+
+  const minutes = currentTime.getUTCMinutes();
+  console.log(offsetHour)
+  return formatTime(localHour, minutes);
 }

@@ -1,30 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { normaliseConvertedHours, formatTime, convertTimezoneToHours } from '../assets/convert';
+import { getLocalTime } from '../assets/utils';
 const props = defineProps({
-  timezone: Number
+  offset: Number
 })
-const offset = ref(null);
-const localTime = ref('');
+const localTime = ref("");
 
-
-function getLocalTime() {
-  const currentTime = new Date();
-  const offsetHour = convertTimezoneToHours(props.timezone);
-
-  offset.value = offsetHour;
-
-  const UTCHour = currentTime.getUTCHours();
-  const localHour = normaliseConvertedHours(UTCHour + offsetHour)[1];
-
-  const minutes = currentTime.getUTCMinutes();
-
-  localTime.value = formatTime(localHour, minutes);
-  setTimeout(getLocalTime, 1000);
-}
 onMounted(() => {
-  getLocalTime();
+  getCurrTime()
 })
+
+function getCurrTime() {
+  localTime.value = getLocalTime(props.offset)
+  setTimeout(getCurrTime, 60000);
+}
 </script>
 
 <template>

@@ -6,7 +6,8 @@ const props = defineProps({
   region: {
     name: String,
     city: String,
-    timezone: Number
+    timezone: Number,
+    offset: Number,
   },
   temp_format: String,
   weather: {
@@ -28,7 +29,7 @@ const props = defineProps({
     <div class="location">
       <h1>{{ region.name }}</h1>
       <span>{{ region.country }}</span>
-      <LocalTimeView :timezone="region.timezone"/>
+      <LocalTimeView :offset="region.offset"/>
     </div>
     <div class="weather">
       <img :src=weather.icon :alt=weather.main />
