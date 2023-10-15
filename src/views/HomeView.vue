@@ -7,7 +7,6 @@ import {
   getSuggestedDropDown,
   formatTemp } from '../assets/utils';
 import CurrentStatView from '../components/CurrentStatView.vue';
-import CurrentOtherStatView from '../components/CurrentOtherStatView.vue';
 import DailyContainerView from '../components/DailyContainerView.vue';
 import HourlyContainerView from '../components/HourlyContainerView.vue'
 import TempChart from '../components/charts/TempChart.vue'
@@ -56,7 +55,9 @@ onMounted(() => {
       (error) => {
         errorMsg.value = error.message;
       }
-  )};
+  )} else {
+    loading.value = false;
+  }
   setCustomRegion();
 })
 
@@ -161,27 +162,22 @@ function setCustomRegion() {
         </form>
       </SearchBoxView>
     </section>
-
     <CurrentStatView
       v-if="location"
       :region="forecast.region"
       :temp_format="forecast.totalList[0].temp_format"
       :weather="forecast.totalList[0].weather"
       :feels_like="forecast.totalList[0].feels_like"
+      :humidity="forecast.totalList[0].humidity"
+      :pressure="forecast.totalList[0].pressure"
+      :wind="forecast.totalList[0].wind"
       class="current" />
-    <div class="summary">
-      <CurrentOtherStatView
-        v-if="forecast"
-        :humidity="forecast.totalList[0].humidity"
-        :pressure="forecast.totalList[0].pressure"
-        :wind="forecast.totalList[0].wind" />
       <div class="hourly_wrapper">
         <div class="hourly_list">
         <HourlyContainerView
           :forecast="forecast.totalList" />
         </div>
       </div>
-    </div>
     <TempChart
     :forecast="forecast.totalList.slice(0, 8)"
     :displayTemp="forecast.displayTemp"/>
@@ -256,14 +252,6 @@ main {
   }
 }
 
-.summary {
-  display: grid;
-  grid-template-columns: minmax(50px, auto) auto;
-  align-self: baseline;
-  overflow: hidden;
-  gap: 1em;
-}
-
 .hourly_wrapper {
   width: auto;
   overflow-x: scroll;
@@ -284,10 +272,13 @@ h3 {
 }
 
 .hourly_list {
-  grid-column-start: 2;
-  grid-column-end: 3;
   display: flex;
   margin-block: 1em;
   color: black;
+  justify-content: space-between;
+  background: #cacacab0;
+  border-radius: 16px;
+  min-width: max-content;
+  width: 100%;
 }
 </style>

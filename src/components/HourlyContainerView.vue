@@ -23,7 +23,7 @@ const props = defineProps({
 <template>
   <div
   v-if="forecast.length != 0"
-  v-for="timeslot of forecast.slice(0, 8)"
+  v-for="(timeslot, index) of forecast.slice(0, 8)"
   class="hourly_card">
     <HourlyView>
       <template #time>
@@ -32,11 +32,11 @@ const props = defineProps({
         </p>
       </template>
       <template #newday>
-        <p>
+        <p v-if="index !== forecast.length">
           {{
-            timeslot.datetime.split(", ")[2] == "00" ?
-            timeslot.datetime.split(", ")[1].substring(0, 5) :
-            ""
+            forecast[index].datetime.split(", ")[0] != forecast[index+1].datetime.split(", ")[0] ?
+            forecast[index+1].datetime.substring(0, 7) :
+            "--"
           }}
         </p>
       </template>
@@ -44,7 +44,7 @@ const props = defineProps({
         <img :src="timeslot.weather.icon" :alt="timeslot.weather.main" />
       </template>
       <template #temp>
-        <p>
+        <p class="temp">
           {{ timeslot.temp_format }}
         </p>
       </template>
@@ -54,15 +54,42 @@ const props = defineProps({
 
 <style scoped>
 .hourly_card {
-  background: rgba(173, 216, 230, 0.5);
-  border-radius: 16px;
-  width: auto;
   display: grid;
   text-align: center;
-  grid-template-rows: 1fr 1fr 4fr 1fr;
-  margin-inline: .75em;
-  margin-block: 1em;
-  padding-block: .25em;
+  margin-block: .5em;
+  padding: .25em;
+  line-height: auto;
+  grid-template-rows: 1fr 1fr 2fr 1fr;
+  font-size: small;
+  justify-content: center;
+
+  .temp {
+    font-weight: 700;
+  }
+
+  img {
+    height: 45px;
+    width: 45px;
+  }
+
+  @media (width > 768px) {
+    margin-inline: 0.5em;
+    grid-template-rows: 1fr 1fr 4fr 1fr;
+    font-size: medium;
+    padding: unset;
+
+    &:first-of-type {
+    margin-inline-start: 0;
+  }
+    &:last-of-type {
+      margin-inline-end: 0;
+    }
+
+    img {
+      height: 100px;
+      width: 100px;
+    }
+  }
 }
 
 .weather {

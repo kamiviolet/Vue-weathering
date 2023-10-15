@@ -17,6 +17,7 @@ defineProps({
 .greetings {
   text-align: left;
   background-color: rgba(240, 248, 255, 0.75);
+  border-radius: 0 16px 16px 0;
   color: black;
   width:min-content;
   padding-inline: 1em;

@@ -1,5 +1,6 @@
 <script setup>
 import LocalTimeView from './LocalTimeView.vue';
+import { convertDegToDirection } from '../assets/convert';
 
 const props = defineProps({
   region: {
@@ -13,6 +14,12 @@ const props = defineProps({
     main: String
   },
   feels_like: String,
+  humidity: Number,
+  pressure: Number,
+  wind: {
+    speed: Number,
+    deg: Number
+  }
 })
 </script>
 
@@ -27,12 +34,27 @@ const props = defineProps({
       <img :src=weather.icon :alt=weather.main />
     </div>
     <div class="temp">
-      <p class="label">Temperature</p>
       <p class="value">{{ temp_format }}</p>
+      <p>
+        <span class="label">Feels like </span>
+        <span class="value">{{ feels_like }}</span>
+      </p>
     </div>
-    <div class="feels_like">
-      <p class="label">Feels like</p>
-      <p class="value">{{ feels_like }}</p>
+    <div class="current_other_stat">
+    <div class="sub_stat">
+      <img class="icon" src="/humidity.svg">
+      <span>{{ humidity }}%</span></div>
+    <div class="sub_stat">
+      <img class="icon" src="/pressure.svg">
+      <span>{{ pressure }} mmHg</span>
+    </div>
+    <div class="sub_stat">
+      <img class="icon" src="/wind.svg">
+      <p>
+        <span>{{ wind.speed }} m/s </span>
+        <span>{{ convertDegToDirection(wind.deg) }}</span>
+      </p>
+    </div>
     </div>
   </div>
 </template>
@@ -47,10 +69,12 @@ const props = defineProps({
   width: 100%;
   justify-self: center;
   padding-inline: .5em;
-
+  background: #cacacab0;
+  border-radius: 12px;
+  color: black;
 
   h1 {
-    font-size: 2.75em;
+    font-size: 2.85em;
     font-weight: 700;
     justify-self: first baseline;
     letter-spacing: 1px;
@@ -65,36 +89,80 @@ const props = defineProps({
   .temp, .feels_like, .weather {
     grid-column: 2/3;
   }
+    
+  p, span {
+      font-weight: 700;
+    }
 
-  .temp > .label {
-    display: none;
+  p {
+    font-size: 1.25em;
   }
 
-  .feels_like > p {
-      display: inline;
-      margin-inline: .25em;
-    }
-    
-  p {
-      font-weight: 700;
-      font-size: 1.25em;
+  .current_other_stat {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-block: 1em;
+    text-align: left;
+    width: 100%;
+    align-self: center;
+    display: flex;
+    justify-content: space-around;
+  }
+
+.sub_stat {
+  display: grid;
+  grid-template-columns: 45px auto;
+  margin-block: 1em;
+  align-items: center;
+
+  span, p {
+    font-size: .85em;
+    font-weight: 600;
+  }
+}
+
+.icon {
+  width: 35px;
+  height: auto;
+}
+
+  @media (width > 768px) {
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: 1fr 1fr;
+    padding: 1em 2em;
+
+    .location {
+      grid-column: 1/2;
+      grid-row: 1/3;
     }
 
-  @media (width > 640px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-
-    .location, .temp, .feels_like, .weather {
-      grid-column: unset;
-      grid-row: unset;
+    .weather  {
+      grid-column: 2/3;
+      grid-row: 1/3;
     }
 
-    .temp > .label {
+    .temp {
+      grid-column: 3/4;
+      grid-row: 1/3;
+
+      span {
+        font-size: .75em;
+        font-weight: 700;
+      }
+    }
+
+    .current_other_stat {
+      grid-column: 4/5;
+      grid-row: 1/3;
       display: block;
+      width: max-content;
     }
 
-    .feels_like > p {
-      display: block;
+    .temp {
+      font-size: 1.5em;
     }
+
+
   }
 }
 

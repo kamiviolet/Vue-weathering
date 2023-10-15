@@ -5,6 +5,7 @@ const props = defineProps({
   dailyRecord: {
     weather_range: [String],
     temp_range: [Number],
+    pressure_range: [Number],
     most_frequent_weather: String,
     max_temp_formatted: String,
     min_temp_formatted: String
@@ -41,7 +42,7 @@ const props = defineProps({
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   padding-inline: 1.25em;
-  background-color: rgba(135, 206, 235, 0.65);
+  background-color: #cacacab0;
   margin-block: 2em;
   border-radius: 16px;
   align-items: center;

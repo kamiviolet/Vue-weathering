@@ -51,27 +51,37 @@ export function getDailyRecord(list) {
   const record = {};
   let tempRange = [];
   let weatherRange = [];
+  let pressureRange = [];
+  let timeslots = 0;
 
   for (let i=0; i<list.length; i++) {
     if (i == 0) {
+      timeslots++;
       tempRange.push(list[i].temp);
       weatherRange.push(list[i].weather.icon);
+      pressureRange.push(list[i].pressure);
 
     } else if (list[i].datetime.substring(5, 15) == list[i-1].datetime.substring(5, 15)) {
+      timeslots++;
       tempRange.push(list[i].temp);
       weatherRange.push(list[i].weather.icon);
+      pressureRange.push(list[i].pressure);
 
     } else if (list[i].datetime.substring(5, 15) != list[i-1].datetime.substring(5, 15)) {
       record[list[i].datetime.substring(0, 15)] = {
         weather_range: [...weatherRange],
         most_frequent_weather: getMostFrequentWeather([...weatherRange]),
         temp_range: [...tempRange],
+        pressure_average: +(pressureRange.reduce((sum, elem) => sum + elem) / timeslots).toFixed(2)
       };
 
+      timeslots = 1;
       tempRange = [list[i].temp];
       weatherRange = [list[i].weather.icon];
+      pressureRange = [list[i].pressure];
     }
   }
+  console.log(record)
   return record;
 }
 

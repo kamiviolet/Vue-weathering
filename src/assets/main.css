@@ -8,6 +8,8 @@ body {
   width: 100vw;
   height: 100vh;
   position: relative;
+  background: radial-gradient(ellipse at bottom right, #595661, transparent),
+  radial-gradient(ellipse at bottom left, #dbdbdb, transparent);
 }
 
 #app {

@@ -21,6 +21,7 @@ const time = ref("day");
   .background {
     width: 100vw;
     min-height: 100vh;
+    height: 100%;
     position:absolute;
     top: 0;
     left: 0;
@@ -29,6 +30,7 @@ const time = ref("day");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    filter: blur(2px);
   }
 
   .light {
@@ -51,10 +53,7 @@ const time = ref("day");
       color: whitesmoke;
     }
   }
-
-  header:has(.night) {
-    background: black;
-  }
+  
   main {
     color: black;
   }

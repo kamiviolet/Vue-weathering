@@ -8,7 +8,6 @@ import FooterView from './components/FooterView.vue';
   <header>
     <div class="wrapper">
       <HeaderView msg="Weathering" />
-
       <nav>
         <RouterLink to="/">Main</RouterLink>
         <RouterLink to="/about">About</RouterLink>
