@@ -27,13 +27,10 @@ function createBarChart(dataset) {
   const paddingBlock = 30;
   const barWidth = 20;
 
-  d3.select("#dailychart").remove()
+  d3.select("#dailychart > *").remove()
 
-  const g = d3.select("#daily_chart_container")
-    .append("svg")
-    .attr("id", "dailychart")
+  const g = d3.select("#dailychart")
     .attr("viewBox", `0 0 ${width + paddingInline * 2} ${height + paddingBlock * 2} `)
-    .style("background", "#cacacab0")
     .append("g");
 
   const parseTime = d3.timeParse("%a, %d/%m/%Y");
@@ -174,7 +171,17 @@ const maxbars = g
 </script>
 
 <template>
-  <div id="daily_chart_container"></div>
+  <div id="daily_chart_container">
+    <div class="legends">
+      <span class="box min_temp_label"></span>
+        <span>Min temperature</span>
+        <span class="box max_temp_label"></span>
+        <span>Max temperature</span>
+        <span class="box pressure_label"></span>
+        <span>Atmospheric Pressure</span>
+        <svg id="dailychart"></svg>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -183,7 +190,27 @@ const maxbars = g
   max-width: 700px;
   margin-block: 2em;
   color: black;
+  background-color: #cacacab0;
+  padding-block: 1em;
+}
 
+.box {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-inline: 1em;
+}
+
+.min_temp_label {
+  background-color: royalblue;
+}
+
+.max_temp_label {
+  background-color: darkred;
+}
+
+.pressure_label {
+  background-color: darkslategray;
 }
 
 </style>
