@@ -188,7 +188,6 @@ const maxbars = g
 #daily_chart_container {
   width: 100%;
   max-width: 700px;
-  margin-block: 2em;
   color: black;
   background-color: #cacacab0;
   padding-block: 1em;

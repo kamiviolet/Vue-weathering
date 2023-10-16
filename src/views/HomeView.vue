@@ -168,7 +168,7 @@ function setCustomRegion() {
         </div>
       </div>
       <HourlyChart :forecast="forecast.totalList.slice(0, 8)" :displayTemp="forecast.displayTemp" />
-      <h3>5 day forecast</h3>
+      <h3>4/5 Day Forecast Chart</h3>
       <section class="daily_forecast">
         <div class="daily_list">
           <DailyContainerView :dailyRecord="formattedDailyRecord" />
@@ -191,6 +191,10 @@ main {
   @media (min-width: 900px) {
     text-align: left;
   }
+}
+
+.warning {
+  margin-block-end: 2em;
 }
 
 .loading {
@@ -263,7 +267,6 @@ main {
   color: black;
   background-color: #cacacab0;
   border-radius: 16px;
-
 }
 
 h3 {
