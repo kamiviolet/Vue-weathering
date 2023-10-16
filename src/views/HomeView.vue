@@ -9,7 +9,7 @@ import {
 import CurrentStatView from '../components/CurrentStatView.vue';
 import DailyContainerView from '../components/DailyContainerView.vue';
 import HourlyContainerView from '../components/HourlyContainerView.vue'
-import TempChart from '../components/charts/TempChart.vue'
+import HourlyChart from '../components/charts/HourlyChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
 import DisplayToggle from '../components/DisplayToggle.vue';
 import Background from '../components/Background.vue';
@@ -57,6 +57,7 @@ onMounted(() => {
       }, 
       (error) => {
         errorMsg.value = error.message;
+        loading.value = false;
       }
   )} else {
     loading.value = false;
@@ -139,10 +140,10 @@ function setCustomRegion() {
 </script>
 
 <template>
-  <Background
-  :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2])" />
   <h2 v-if="loading" class="loading">loading...</h2>
-  <main v-else>
+  <Background v-if="forecast.region.name"
+  :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2])" />
+  <main v-if="!loading">
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">
       <DisplayToggle
@@ -167,8 +168,8 @@ function setCustomRegion() {
         </form>
       </SearchBoxView>
     </section>
+    <section v-if="forecast.region.name">
     <CurrentStatView
-      v-if="location"
       :region="forecast.region"
       :temp_format="forecast.totalList[0].temp_format"
       :weather="forecast.totalList[0].weather"
@@ -183,7 +184,7 @@ function setCustomRegion() {
           :forecast="forecast.totalList" />
         </div>
       </div>
-    <TempChart
+    <HourlyChart
     :forecast="forecast.totalList.slice(0, 8)"
     :displayTemp="forecast.displayTemp"/>
     <h3>5 day forecast</h3>
@@ -191,6 +192,7 @@ function setCustomRegion() {
       <DailyContainerView
         :dailyRecord="formattedDailyRecord" />
     </div>
+  </section>
   </main>
 </template>
 

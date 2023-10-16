@@ -42,7 +42,7 @@ const props = defineProps({
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   padding-inline: 1.25em;
-  border-bottom: 2px solid rgb(0, 0, 0);
+  border-bottom: 2px solid #666666;
   align-items: center;
   text-align: center;
 
