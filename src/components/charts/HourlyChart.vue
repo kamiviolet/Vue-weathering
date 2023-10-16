@@ -11,7 +11,7 @@ const props = defineProps({
   displayTemp: String
 })
 
-const chartdata = ref(computed(()=>props.forecast.map(e => ({
+const chartdata = ref(computed(() => props.forecast.map(e => ({
   datetime: e.datetime,
   humidity: e.humidity,
   temp_format: parseInt(formatTemp(e.temp, props.displayTemp))
@@ -39,7 +39,7 @@ function createChart(dataset) {
   const svg = d3
     .select("svg")
     .attr("id", "tempchart")
-    .attr("viewBox", `0 0 ${width + paddingInline *2} ${height + paddingBlock*2} `)
+    .attr("viewBox", `0 0 ${width + paddingInline * 2} ${height + paddingBlock * 2} `)
 
   const g = svg.append("g");
 
@@ -55,7 +55,7 @@ function createChart(dataset) {
   const yScale = d3
     .scaleLinear()
     .domain(
-      [d3.min(dataset, d =>parseInt(d.temp_format) - 1), d3.max(dataset, d => parseInt(d.temp_format) + 1)]
+      [d3.min(dataset, d => parseInt(d.temp_format) - 1), d3.max(dataset, d => parseInt(d.temp_format) + 1)]
     )
     .range([height, 0]);
 
@@ -80,17 +80,17 @@ function createChart(dataset) {
 
   const YAxisGenerator = d3
     .axisLeft(yScale)
-    
+
   const humidityAxisGenerator = d3
     .axisRight(humidityYScale)
 
   g.append("g")
-    .attr(":transform", `translate(${paddingInline}, ${height+paddingBlock})`)
+    .attr(":transform", `translate(${paddingInline}, ${height + paddingBlock})`)
     .attr("id", "x-axis")
     .attr("class", "x-axis")
     .call(XAxisGenerator)
 
-    g.append("g")
+  g.append("g")
     .attr(":transform", `translate(${width + paddingInline},${paddingBlock})`)
     .attr("id", "humidity-axis")
     .attr("class", "humidity-axis")
@@ -101,7 +101,7 @@ function createChart(dataset) {
     .attr("y", 55)
     .attr("x", -90)
     .attr("text-anchor", "end")
-    .text("Atmospheric humidity (%)");    
+    .text("Atmospheric humidity (%)");
 
   g.append("path")
     .datum(dataset)
@@ -122,7 +122,7 @@ function createChart(dataset) {
     .attr("y", -40)
     .attr("x", -120)
     .attr("text-anchor", "end")
-    .text("Temperature");    
+    .text("Temperature");
 
   g.append("path")
     .datum(dataset)
@@ -157,11 +157,9 @@ function createChart(dataset) {
   margin-block: 3em;
 }
 
-.legends {
-  span {
-    font-weight: 700;
-    color: black;
-  }
+.legends span {
+  font-weight: 700;
+  color: black;
 }
 
 .box {
@@ -174,11 +172,13 @@ function createChart(dataset) {
 .temp_label {
   background-color: darkgreen;
 }
+
 .humidity_label {
   background-color: purple;
 }
 
-.x-axis, .y-axis, .humidity-axis {
+.x-axis,
+.y-axis,
+.humidity-axis {
   color: black;
-}
-</style>
+}</style>

@@ -5,7 +5,8 @@ import {
   getForecastByCoords,
   getForecastByCity,
   getSuggestedDropDown,
-  formatTemp } from '../assets/utils';
+  formatTemp
+} from '../assets/utils';
 import CurrentStatView from '../components/CurrentStatView.vue';
 import DailyContainerView from '../components/DailyContainerView.vue';
 import HourlyContainerView from '../components/HourlyContainerView.vue'
@@ -53,13 +54,14 @@ onMounted(() => {
           longitude: position.coords.longitude,
           latitude: position.coords.latitude,
         };
-        
-      }, 
+
+      },
       (error) => {
         errorMsg.value = error.message;
         loading.value = false;
       }
-  )} else {
+    )
+  } else {
     loading.value = false;
   }
   setCustomRegion();
@@ -69,7 +71,7 @@ watch(location, () => {
   loading.value = true;
 
   getForecastByCoords(location.value)
-    .then(({city, record}) => {
+    .then(({ city, record }) => {
       loading.value = false;
 
       forecast.totalList = record.map((e) => ({
@@ -84,14 +86,14 @@ watch(location, () => {
         offset: computed(() => convertTimezoneToHours(city.timezone)),
       };
     })
-    .then(()=>forecast.dailyRecord = getDailyRecord(forecast.totalList))
+    .then(() => forecast.dailyRecord = getDailyRecord(forecast.totalList))
 })
 
-watch(customRegion, ()=>{
+watch(customRegion, () => {
   loading.value = true;
 
   getForecastByCity(customRegion.value)
-    .then(({city, record}) => {
+    .then(({ city, record }) => {
       loading.value = false;
 
       forecast.totalList = record.map((e) => ({
@@ -106,21 +108,21 @@ watch(customRegion, ()=>{
         offset: computed(() => convertTimezoneToHours(city.timezone)),
       };
     })
-      .then(()=>forecast.dailyRecord = getDailyRecord(forecast.totalList))
+    .then(() => forecast.dailyRecord = getDailyRecord(forecast.totalList))
 })
 
-watch(searchTerm, ()=>{
+watch(searchTerm, () => {
   getSuggestedDropDown(searchTerm.value)
-  .then(d => {
-    if (d) {
-      suggestedCities.value = d;
-    }
-  })
+    .then(d => {
+      if (d) {
+        suggestedCities.value = d;
+      }
+    })
 })
 
 const formattedDailyRecord = computed(() => {
   return Object.fromEntries(
-    Object.entries(forecast.dailyRecord).map(([k,v]) => {
+    Object.entries(forecast.dailyRecord).map(([k, v]) => {
       v = {
         ...v,
         max_temp_formatted: formatTemp(
@@ -128,7 +130,7 @@ const formattedDailyRecord = computed(() => {
         min_temp_formatted: formatTemp(
           Math.min(...v?.temp_range), forecast.displayTemp),
       }
-      return [k,v];
+      return [k, v];
     })
   )
 })
@@ -141,58 +143,36 @@ function setCustomRegion() {
 
 <template>
   <h2 v-if="loading" class="loading">loading...</h2>
-  <Background v-if="forecast.region.name"
-  :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2])" />
+  <Background v-if="forecast.region.name" :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2])" />
   <main v-if="!loading">
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">
-      <DisplayToggle
-      :displayTemp="forecast.displayTemp"
-      @toggle="(display)=>forecast.displayTemp=display" />
+      <DisplayToggle :displayTemp="forecast.displayTemp" @toggle="(display) => forecast.displayTemp = display" />
       <SearchBoxView>
-        <form
-        @submit.prevent="setCustomRegion"
-        class="search_form"
-        >
-          <input
-            v-model="searchTerm"
-            class="textbox"
-            placeholder="Please enter a city name"
-          />
-          <button
-            type="submit"
-            class="submit_btn"
-            >
+        <form @submit.prevent="setCustomRegion" class="search_form">
+          <input v-model="searchTerm" class="textbox" placeholder="Please enter a city name" />
+          <button type="submit" class="submit_btn">
             &#x1F50E
           </button>
         </form>
       </SearchBoxView>
     </section>
     <section v-if="forecast.region.name">
-    <CurrentStatView
-      :region="forecast.region"
-      :temp_format="forecast.totalList[0].temp_format"
-      :weather="forecast.totalList[0].weather"
-      :feels_like="forecast.totalList[0].feels_like"
-      :humidity="forecast.totalList[0].humidity"
-      :pressure="forecast.totalList[0].pressure"
-      :wind="forecast.totalList[0].wind"
-      class="current" />
+      <CurrentStatView :region="forecast.region" :temp_format="forecast.totalList[0].temp_format"
+        :weather="forecast.totalList[0].weather" :feels_like="forecast.totalList[0].feels_like"
+        :humidity="forecast.totalList[0].humidity" :pressure="forecast.totalList[0].pressure"
+        :wind="forecast.totalList[0].wind" class="current" />
       <div class="hourly_wrapper">
         <div class="hourly_list">
-        <HourlyContainerView
-          :forecast="forecast.totalList" />
+          <HourlyContainerView :forecast="forecast.totalList" />
         </div>
       </div>
-    <HourlyChart
-    :forecast="forecast.totalList.slice(0, 8)"
-    :displayTemp="forecast.displayTemp"/>
-    <h3>5 day forecast</h3>
-    <div class="daily_list">
-      <DailyContainerView
-        :dailyRecord="formattedDailyRecord" />
-    </div>
-  </section>
+      <HourlyChart :forecast="forecast.totalList.slice(0, 8)" :displayTemp="forecast.displayTemp" />
+      <h3>5 day forecast</h3>
+      <div class="daily_list">
+        <DailyContainerView :dailyRecord="formattedDailyRecord" />
+      </div>
+    </section>
   </main>
 </template>
 
@@ -204,6 +184,7 @@ main {
   width: 100%;
   position: relative;
   padding-inline: 0.75em;
+
   @media (min-width: 900px) {
     text-align: left;
   }
@@ -230,19 +211,20 @@ main {
 .search_form {
   display: grid;
   width: 200px;
-
+  justify-self: self-end;
   grid-template-columns: 150px auto;
   justify-items: first baseline;
   align-items: center;
   font-size: .9em;
-  button {
-    justify-self: last baseline;
-  }
+}
+
+.search_form button {
+  justify-self: last baseline;
 }
 
 .textbox {
   max-width: 90%;
-  width:200px;
+  width: 200px;
   border: unset;
   padding: .25em;
   border-bottom: 1px black solid;
@@ -250,7 +232,7 @@ main {
 
 .submit_btn {
   max-width: 90%;
-  width:50px;
+  width: 50px;
   padding: .25em;
   background-color: whitesmoke;
   border-radius: 16px;
@@ -262,7 +244,7 @@ main {
 
 .hourly_wrapper {
   width: auto;
-  overflow-x: scroll;
+  overflow: auto;
 }
 
 .daily_list {
