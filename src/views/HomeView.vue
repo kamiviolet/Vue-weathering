@@ -14,7 +14,7 @@ import HourlyChart from '../components/charts/HourlyChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
 import DisplayToggle from '../components/DisplayToggle.vue';
 import Background from '../components/Background.vue';
-import DailyChart from '../components/charts/dailyChart.vue';
+import DailyChart from '../components/charts/DailyChart.vue';
 import { convertTimezoneToHours } from '../assets/convert';
 
 const location = ref({});
