@@ -65,6 +65,15 @@ function createChart(dataset) {
     .range([height, 0])
     .nice()
 
+  const XAxisGenerator = d3
+    .axisBottom(xScale)
+
+  const YAxisGenerator = d3
+    .axisLeft(yScale)
+
+  const humidityAxisGenerator = d3
+    .axisRight(humidityYScale)
+
   const line = d3
     .line()
     .x((d) => xScale(parseTime(d.datetime)))
@@ -74,15 +83,6 @@ function createChart(dataset) {
     .line()
     .x((d) => xScale(parseTime(d.datetime)))
     .y((d) => humidityYScale(d.humidity))
-
-  const XAxisGenerator = d3
-    .axisBottom(xScale)
-
-  const YAxisGenerator = d3
-    .axisLeft(yScale)
-
-  const humidityAxisGenerator = d3
-    .axisRight(humidityYScale)
 
   g.append("g")
     .attr(":transform", `translate(${paddingInline}, ${height + paddingBlock})`)
@@ -102,14 +102,6 @@ function createChart(dataset) {
     .attr("x", -90)
     .attr("text-anchor", "end")
     .text("Atmospheric humidity (%)");
-
-  g.append("path")
-    .datum(dataset)
-    .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
-    .attr("fill", "none")
-    .attr("stroke", "darkgreen")
-    .attr("stroke-width", 4)
-    .attr(":d", humidityLine);
 
   g.append("g")
     .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
@@ -131,6 +123,35 @@ function createChart(dataset) {
     .attr("stroke", "purple")
     .attr("stroke-width", 4)
     .attr(":d", line);
+
+  g.selectAll("spot-temp")
+    .data(dataset)
+    .enter()
+    .append("circle")
+    .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
+    .attr("cx", d => xScale(parseTime(d.datetime)))
+    .attr("cy", d => yScale(parseInt(d.temp_format)))
+    .attr("r", 5)
+    .style("fill", "black")
+
+  g.append("path")
+    .datum(dataset)
+    .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
+    .attr("fill", "none")
+    .attr("stroke", "darkgreen")
+    .attr("stroke-width", 4)
+    .attr(":d", humidityLine)
+
+    g.selectAll("spot-humidity")
+    .data(dataset)
+    .enter()
+    .append("circle")
+    .attr(":transform", `translate(${paddingInline},${paddingBlock})`)
+    .attr("cx", d => xScale(parseTime(d.datetime)))
+    .attr("cy", d => humidityYScale(d.humidity))
+    .attr("r", 5)
+    .style("fill", "black")
+    .exit()
 }
 
 </script>
