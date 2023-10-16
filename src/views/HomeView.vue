@@ -14,6 +14,7 @@ import HourlyChart from '../components/charts/HourlyChart.vue'
 import SearchBoxView from '../components/SearchBoxView.vue';
 import DisplayToggle from '../components/DisplayToggle.vue';
 import Background from '../components/Background.vue';
+import DailyChart from '../components/charts/dailyChart.vue';
 import { convertTimezoneToHours } from '../assets/convert';
 
 const location = ref({});
@@ -121,18 +122,17 @@ watch(searchTerm, () => {
 })
 
 const formattedDailyRecord = computed(() => {
-  return Object.fromEntries(
-    Object.entries(forecast.dailyRecord).map(([k, v]) => {
+  return Object.entries(forecast.dailyRecord).map(([k, v]) => {
       v = {
         ...v,
+        date: k,
         max_temp_formatted: formatTemp(
           Math.max(...v?.temp_range), forecast.displayTemp),
         min_temp_formatted: formatTemp(
           Math.min(...v?.temp_range), forecast.displayTemp),
       }
-      return [k, v];
+      return v;
     })
-  )
 })
 
 function setCustomRegion() {
@@ -169,9 +169,12 @@ function setCustomRegion() {
       </div>
       <HourlyChart :forecast="forecast.totalList.slice(0, 8)" :displayTemp="forecast.displayTemp" />
       <h3>5 day forecast</h3>
-      <div class="daily_list">
-        <DailyContainerView :dailyRecord="formattedDailyRecord" />
-      </div>
+      <section class="daily_forecast">
+        <div class="daily_list">
+          <DailyContainerView :dailyRecord="formattedDailyRecord" />
+        </div>
+        <DailyChart :dailyRecord="formattedDailyRecord"  />
+      </section>
     </section>
   </main>
 </template>
@@ -247,6 +250,12 @@ main {
   overflow: auto;
 }
 
+.daily_forecast {
+  display: grid;
+  place-items: center;
+  gap: 2em;
+}
+
 .daily_list {
   width: 100%;
   margin-block: 1em;
@@ -254,6 +263,7 @@ main {
   color: black;
   background-color: #cacacab0;
   border-radius: 16px;
+
 }
 
 h3 {

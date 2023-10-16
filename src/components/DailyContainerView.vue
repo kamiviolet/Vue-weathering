@@ -3,6 +3,7 @@ import DailyView from '../components/DailyView.vue';
 
 const props = defineProps({
   dailyRecord: {
+    date: String,
     weather_range: [String],
     temp_range: [Number],
     pressure_range: [Number],
@@ -14,13 +15,13 @@ const props = defineProps({
 </script>
 
 <template>
-  <div v-if="dailyRecord.length != 0" v-for="(day, date) of dailyRecord" class="daily_row">
+  <div v-if="dailyRecord.length != 0" v-for="day of dailyRecord" class="daily_row">
     <DailyView>
       <template #day>
-        {{ date.substring(0, 3) }}
+        {{ day.date.substring(0, 3) }}
       </template>
       <template #date>
-        {{ date.substring(5, 10) }}
+        {{ day.date.substring(5, 10) }}
       </template>
       <template #weather>
         <img :src="day.most_frequent_weather" />
@@ -46,15 +47,19 @@ const props = defineProps({
   align-items: center;
   text-align: center;
 
-  &:last-of-type {
-    border-bottom: unset;
-  }
-
   @media (width > 900px) {
-    grid-template-columns: 1fr 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1fr auto auto;
     grid-template-rows: auto;
     text-align: left;
   }
+}
+
+.daily_row:last-of-type {
+    border-bottom: unset;
+}
+
+.daily_row img {
+  width: 55px
 }
 
 .max_temp,

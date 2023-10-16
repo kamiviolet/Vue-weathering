@@ -27,7 +27,7 @@ onMounted(
 
 function createChart(dataset) {
   const width = 600;
-  const height = 300;
+  const height = 350;
   const paddingInline = 60;
   const paddingBlock = 20;
 
@@ -35,6 +35,7 @@ function createChart(dataset) {
   d3.select("#y-axis").remove()
   d3.select("#humidity-axis").remove()
   d3.selectAll("path").remove()
+  d3.selectAll("circle").remove()
 
   const svg = d3
     .select("svg")
