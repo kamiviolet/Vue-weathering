@@ -111,6 +111,10 @@ watch(customRegion, () => {
       };
     })
     .then(() => forecast.dailyRecord = getDailyRecord(forecast.totalList))
+    .catch(() => {
+      loading.value = false;
+      errorMsg.value = "The city is not recognised. Please try another name.";
+    })
 })
 
 watch(searchTerm, () => {
@@ -142,6 +146,7 @@ const formattedDailyRecord = computed(() => {
 function setCustomRegion(city) {
   customRegion.value = city?? searchTerm.value;
   searchTerm.value = "";
+  suggestedCities.value = [];
 }
 </script>
 
@@ -253,6 +258,11 @@ main {
   position: absolute;
   width: 125px;
   height: auto;
+  display: none;
+}
+
+.searchbox_container:focus-within .dropdown {
+  display: block;
 }
 
 .items {
