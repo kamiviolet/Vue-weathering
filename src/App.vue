@@ -29,7 +29,7 @@ header {
 }
 
 nav {
-  width: 100%;
+  width: 110%;
   text-align: left;
   margin-left: -1rem;
   margin-top: .5em;
@@ -37,6 +37,10 @@ nav {
   color: black;
   background: rgba(255, 255, 255, 0.5);
   padding: .75em 0;
+
+  @media (width > 640px) {
+    width: 100%;
+  }
 }
 
 nav a {
