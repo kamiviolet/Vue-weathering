@@ -35,7 +35,7 @@
   }
 }
 .weather {
-  justify-self: end;
+  justify-self: first baseline;
   grid-row: 1/3;
   @media (width > 480px) {
     grid-column: 3/4;

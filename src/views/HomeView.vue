@@ -303,6 +303,11 @@ main {
   display: grid;
   place-items: center;
   gap: 2em;
+  grid-template-columns: 1fr;
+
+  @media (width > 1024px) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .daily_list {
@@ -312,6 +317,12 @@ main {
   color: black;
   background-color: #cacacab0;
   border-radius: 16px;
+  height: 100%;
+  display: grid;
+
+  @media (width > 1024px) {
+    grid-column: 2/3;
+  }
 }
 
 h3 {

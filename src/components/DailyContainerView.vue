@@ -36,38 +36,32 @@ const props = defineProps({
   </div>
 </template>
 
-<style>
+<style scoped>
 .daily_row {
   display: grid;
   width: 100%;
+  height: auto;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   padding-inline: 1.25em;
   border-bottom: 2px solid #666666;
-  align-items: center;
-  text-align: center;
-
-  @media (width > 900px) {
-    grid-template-columns: 1fr 1fr auto auto;
-    grid-template-rows: auto;
-    text-align: left;
+  align-self: center;
+  place-items: center;
+  @media (width > 480px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 
 .daily_row:last-of-type {
-    border-bottom: unset;
+  border-bottom: unset;
 }
 
 .daily_row img {
-  width: 55px
+  width: 75px;
 }
 
 .max_temp,
 .min_temp {
   margin-inline: .5em;
-
-  @media (width > 480px) {
-    display: inline;
-  }
 }
 </style>

@@ -179,8 +179,8 @@ const maxbars = g
         <span>Max temperature</span>
         <span class="box pressure_label"></span>
         <span>Atmospheric Pressure</span>
+      </div>
         <svg id="dailychart"></svg>
-    </div>
   </div>
 </template>
 
@@ -190,7 +190,20 @@ const maxbars = g
   max-width: 700px;
   color: black;
   background-color: #cacacab0;
-  padding-block: 1em;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  grid-template-rows: auto auto;
+
+  @media (width > 1024px) {
+    grid-column: 1/2;
+    grid-row: 1/2;
+  }
+}
+
+.legends {
+  padding: 1em;
+  font-size: .85em;
 }
 
 .box {
