@@ -141,11 +141,23 @@ export async function getCountryByCode(code) {
   .catch((error) => console.warn(error));
 }
 
-export function getLocalTime(offsetHour) {
+export function getLocalTime(offsetTime) {
   const currentTime = new Date();
-  const UTCHour = currentTime.getUTCHours();
-  const localHour = normaliseConvertedHours(UTCHour + offsetHour)[1];
+  let UTCHour = currentTime.getUTCHours();
+  let UTCMinutes = currentTime.getUTCMinutes();
 
-  const minutes = currentTime.getUTCMinutes();
-  return formatTime(localHour, minutes);
+  const offsetHour = parseInt(offsetTime);
+  const offsetMinutes = (offsetTime - offsetHour) * 60;
+
+  UTCHour += offsetHour; 
+  UTCMinutes += offsetMinutes;
+
+  if (offsetMinutes >= 60) {
+    UTCHour++;
+    offsetMinutes -= 60;
+  }
+
+  const localHour = normaliseConvertedHours(UTCHour)[1];
+
+  return formatTime(localHour, UTCMinutes);
 }

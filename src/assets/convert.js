@@ -18,13 +18,27 @@ export function convertToDateString(dt_str) {
 }
 
 export function convertToLocalTime(str, timezoneOffset) {
+  const offsetTime = convertTimezoneToHours(timezoneOffset);
+  const offsetHour = parseInt(offsetTime);
+  const offsetMinutes = (offsetTime - offsetHour) * 60;
+
   const localTime = str.split(" ")
   let date = localTime[0];
-  let time = localTime[1];
-  time = +time.substring(0,2) + convertTimezoneToHours(timezoneOffset);
-  let [normalisedDate, normalisedTime] = normaliseConvertedHours(time, date);
-  normalisedTime += ":00:00"
+  let [hours, minutes] = localTime[1]
+    .substring(0,5)
+    .split(":")
 
+  hours = +hours + offsetHour; 
+  minutes = +minutes + offsetMinutes;
+
+  if (minutes >= 60) {
+    hours++;
+    minutes -= 60;
+  }
+  
+  let [normalisedDate, normalisedTime] = normaliseConvertedHours(hours, date);
+  normalisedTime = normalisedTime + ":" + minutes + ":00"
+  
   return [normalisedDate, normalisedTime].join(" ")
 }
 
