@@ -128,7 +128,10 @@ export async function getSuggestedDropDown(str) {
     if (data.features?.length > 0) return getFilteredCities(data.features, data.query.text) 
   })
   .then(list => {
-    if (list) list.map(e => e.properties.city)
+    if (list) {
+     let result = list.map(e => [e.properties.city, e.properties.country_code]);
+     return result;
+    }
   })
   .catch((error) => console.warn(error))
 }

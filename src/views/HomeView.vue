@@ -66,6 +66,7 @@ onMounted(() => {
     loading.value = false;
   }
   setCustomRegion();
+  getSuggestedDropDown(searchTerm.value);
 })
 
 watch(location, () => {
@@ -113,14 +114,17 @@ watch(customRegion, () => {
 })
 
 watch(searchTerm, () => {
-  getSuggestedDropDown(searchTerm.value)
-    .then(d => {
-      if (d) {
-        suggestedCities.value = d;
-      }
-    })
+  if (searchTerm.value == "") {
+    suggestedCities.value = []
+  } else {
+    getSuggestedDropDown(searchTerm.value)
+      .then(d => {
+        if (d) {
+          suggestedCities.value = d;
+        }
+      })
+  }
 })
-
 const formattedDailyRecord = computed(() => {
   return Object.entries(forecast.dailyRecord).map(([k, v]) => {
       v = {
@@ -135,9 +139,9 @@ const formattedDailyRecord = computed(() => {
     })
 })
 
-function setCustomRegion() {
-  customRegion.value = searchTerm.value
-  searchTerm.value = ""
+function setCustomRegion(city) {
+  customRegion.value = city?? searchTerm.value;
+  searchTerm.value = "";
 }
 </script>
 
@@ -151,12 +155,24 @@ function setCustomRegion() {
     <section class="setting">
       <DisplayToggle :displayTemp="forecast.displayTemp" @toggle="(display) => forecast.displayTemp = display" />
       <SearchBoxView>
-        <form @submit.prevent="setCustomRegion" class="search_form">
+        <section class="searchbox_container">
+        <form @submit.prevent="()=>setCustomRegion()" class="search_form">
           <input v-model="searchTerm" class="textbox" placeholder="Please enter a city name" />
           <button type="submit" class="submit_btn">
             &#x1F50E
           </button>
         </form>
+        <div class="dropdown">
+          <div
+          @click.prevent="()=>setCustomRegion(suggestion)"
+          v-for="suggestion in suggestedCities"
+          class="items"
+          >
+            <span>{{ suggestion[0] }}</span>
+            <span class="country_code">{{ suggestion[1] }}</span>
+          </div>
+        </div>
+        </section>
       </SearchBoxView>
     </section>
     <section v-if="forecast.region.name">
@@ -213,7 +229,7 @@ main {
   justify-items: last baseline;
   transform: translateY(-6.5em);
   padding-inline: .75em;
-  height: 5em;
+  height: 5.25em;
   gap: .75em
 }
 
@@ -227,15 +243,42 @@ main {
   font-size: .9em;
 }
 
+.searchbox_container {
+  grid-row: 2/3;
+  grid-column: 1/2;
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  width: 125px;
+  height: auto;
+}
+
+.items {
+  background-color: rgb(191, 217, 226);
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  font-size: .85em;
+  padding: .25em;
+  cursor: pointer;
+}
+
+.country_code {
+  color: darkslategray;
+  text-transform: uppercase;
+}
+
 .search_form button {
   justify-self: last baseline;
 }
 
 .textbox {
-  max-width: 90%;
-  width: 200px;
+  width: 125px;
   border: unset;
-  padding: .25em;
+  padding: .5em .25em;
   border-bottom: 1px black solid;
 }
 
