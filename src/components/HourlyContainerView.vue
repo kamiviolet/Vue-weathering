@@ -64,9 +64,13 @@ const props = defineProps({
   margin-block: .5em;
   padding: .25em;
   line-height: auto;
-  grid-template-rows: 1fr 1fr 2fr 1fr;
+  grid-template-rows: 1fr 1fr 45px 1fr;
   font-size: small;
   justify-content: center;
+
+  @media (width > 900px) {
+    grid-template-rows: 1fr 1fr 2fr 1fr;
+  }
 }
 
 .temp {
@@ -74,8 +78,8 @@ const props = defineProps({
 }
 
 img {
-  height: 45px;
-  width: 45px;
+  height: 35px;
+  width: 35px;
 }
 
 @media (width > 768px) {

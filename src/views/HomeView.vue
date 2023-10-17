@@ -310,8 +310,18 @@ main {
 }
 
 .hourly_wrapper {
-  width: auto;
   overflow: auto;
+  width: 100%;
+}
+
+.hourly_list {
+  display: flex;
+  margin-block: 1em;
+  color: black;
+  justify-content: space-between;
+  background: #cacacab0;
+  border-radius: 16px;
+  min-width: fit-content;
 }
 
 .daily_forecast {
@@ -347,14 +357,4 @@ h3 {
   margin-block: 1em;
 }
 
-.hourly_list {
-  display: flex;
-  margin-block: 1em;
-  color: black;
-  justify-content: space-between;
-  background: #cacacab0;
-  border-radius: 16px;
-  min-width: max-content;
-  width: 100%;
-}
 </style>
