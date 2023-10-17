@@ -97,6 +97,7 @@ watch(customRegion, () => {
   getForecastByCity(customRegion.value)
     .then(({ city, record }) => {
       loading.value = false;
+      errorMsg.value = "";
 
       forecast.totalList = record.map((e) => ({
         ...e,
@@ -156,7 +157,7 @@ function setCustomRegion(city) {
     v-if="forecast.region.name"
     :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2]) - 3" />
   <main v-if="!loading">
-    <p class="warning">{{ errorMsg }}</p>
+    <p v-if="errorMsg" class="warning">{{ errorMsg }}</p>
     <section class="setting">
       <DisplayToggle :displayTemp="forecast.displayTemp" @toggle="(display) => forecast.displayTemp = display" />
       <SearchBoxView>
@@ -218,6 +219,10 @@ main {
 
 .warning {
   margin-block-end: 2em;
+  color: red;
+  background-color: rgb(250, 219, 224);
+  padding-block: .5em;
+  text-align: center;
 }
 
 .loading {
@@ -258,22 +263,21 @@ main {
   position: absolute;
   width: 125px;
   height: auto;
-  display: none;
-}
-
-.searchbox_container:focus-within .dropdown {
-  display: block;
 }
 
 .items {
   background-color: rgb(191, 217, 226);
   color: black;
-  display: flex;
   justify-content: space-between;
   text-align: left;
   font-size: .85em;
   padding: .25em;
   cursor: pointer;
+  display: flex;
+}
+
+.items:hover {
+  background-color: rgb(255, 220, 175);
 }
 
 .country_code {
