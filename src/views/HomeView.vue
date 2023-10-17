@@ -236,11 +236,17 @@ main {
   right: 0;
   display: grid;
   align-items: end;
-  justify-items: last baseline;
+  justify-items: end;
   transform: translateY(-6.5em);
   padding-inline: .75em;
   height: 5.25em;
   gap: .75em
+}
+
+.searchbox_container {
+  grid-row: 2/3;
+  grid-column: 1/2;
+  position: relative;
 }
 
 .search_form {
@@ -253,11 +259,6 @@ main {
   font-size: .9em;
 }
 
-.searchbox_container {
-  grid-row: 2/3;
-  grid-column: 1/2;
-  position: relative;
-}
 
 .dropdown {
   position: absolute;
