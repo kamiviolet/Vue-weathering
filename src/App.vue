@@ -38,7 +38,7 @@ nav {
   background: rgba(255, 255, 255, 0.5);
   padding: .75em 0;
 
-  @media (width > 640px) {
+  @media (width > 768px) {
     width: 100%;
   }
 }
