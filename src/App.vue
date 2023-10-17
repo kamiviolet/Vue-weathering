@@ -29,7 +29,7 @@ header {
 }
 
 nav {
-  width: 110%;
+  width: 100%;
   text-align: left;
   margin-left: -1rem;
   margin-top: .5em;
