@@ -21,6 +21,5 @@ defineProps({
   color: black;
   width:min-content;
   padding-inline: 1em;
-  margin-left: -1rem;
 }
 </style>

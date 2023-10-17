@@ -23,15 +23,14 @@ import FooterView from './components/FooterView.vue';
 header {
   line-height: 1.5;
   width: 100%;
-  padding: .75em;
+  padding-block: .75em;
   color: gray;
   font-weight: 700;
 }
 
 nav {
-  width: 110%;
+  width: 100%;
   text-align: left;
-  margin-left: -1rem;
   margin-top: .5em;
   font-size: 1rem;
   color: black;
