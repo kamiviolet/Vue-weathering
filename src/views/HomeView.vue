@@ -143,7 +143,9 @@ function setCustomRegion() {
 
 <template>
   <h2 v-if="loading" class="loading">loading...</h2>
-  <Background v-if="forecast.region.name" :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2])" />
+  <Background
+    v-if="forecast.region.name"
+    :currentTime="parseInt(forecast.totalList[0].datetime.split(', ')[2]) - 3" />
   <main v-if="!loading">
     <p class="warning">{{ errorMsg }}</p>
     <section class="setting">

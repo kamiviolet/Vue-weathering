@@ -1,9 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+
 const props = defineProps({
   currentTime: Number,
 })
-const time = ref("day");
 </script>
 
 <template>
