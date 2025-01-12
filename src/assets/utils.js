@@ -149,8 +149,8 @@ export function getLocalTime(offsetTime) {
   let UTCHour = currentTime.getUTCHours();
   let UTCMinutes = currentTime.getUTCMinutes();
 
-  const offsetHour = parseInt(offsetTime);
-  const offsetMinutes = (offsetTime - offsetHour) * 60;
+  let offsetHour = parseInt(offsetTime);
+  let offsetMinutes = (offsetTime - offsetHour) * 60;
 
   UTCHour += offsetHour; 
   UTCMinutes += offsetMinutes;
